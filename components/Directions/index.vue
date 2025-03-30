@@ -5,9 +5,9 @@
 
         <NuxtLayout name="container">
             <div class="directions__header" data-aos="fade-up">
-                <span class="directions__badge">
-                    <span>ОСВІТНІ НАПРЯМКИ</span>
-                </span>
+                <OthersBadge>
+                    Освітні напрямки
+                </OthersBadge>
                 <h2 class="directions__title">НАШІ <span class="directions__title-accent">НАПРЯМКИ</span></h2>
                 <p class="directions__subtitle">
                     NaGrani охоплює широкий спектр напрямків виживання та безпеки. Кожен з них розроблений для формування конкретних навичок,

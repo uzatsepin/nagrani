@@ -8,11 +8,11 @@
         </div>
 
         <NuxtLayout name="container">
-            <div class="mission__content" data-aos="fade-up">
+            <div
+                class="mission__content"
+                data-aos="fade-up">
                 <div class="mission__header">
-                    <span class="mission__badge">
-                        <span>НАША ФІЛОСОФІЯ</span>
-                    </span>
+                    <OthersBadge>Наша філософія</OthersBadge>
                     <h2 class="mission__title">НАША <span class="mission__title-accent">МІСІЯ</span></h2>
                     <p class="mission__subtitle">
                         Ми працюємо, щоб дати людям знання та навички, які рятують життя. Наша місія — зробити світ безпечнішим через освіту та практичну
@@ -21,7 +21,9 @@
                 </div>
 
                 <div class="mission__grid">
-                    <div class="mission__text-content" data-aos="fade-right">
+                    <div
+                        class="mission__text-content"
+                        data-aos="fade-right">
                         <h3 class="mission__section-title">НАША ГОЛОВНА ЗАДАЧА ТА МІСІЯ</h3>
                         <p class="mission__paragraph">
                             Ми віримо, що правильна підготовка та знання є ключем до виживання в будь-якій ситуації. Наша мета — забезпечити кожну людину
@@ -48,7 +50,9 @@
                         <OthersPrimaryButton>ДІЗНАТИСЯ БІЛЬШЕ ПРО НАШУ МІСІЮ</OthersPrimaryButton>
                     </div>
 
-                    <div class="mission__image-container" data-aos="fade-left">
+                    <div
+                        class="mission__image-container"
+                        data-aos="fade-left">
                         <div class="mission__image-wrapper">
                             <NuxtImg
                                 src="/images/mission.webp"
@@ -238,6 +242,60 @@
         position: absolute;
         inset: 0;
         background: linear-gradient(to top, rgba(#0a0a0a, 0.7), transparent);
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: -50px 0 0 -50px;
+            width: calc(100% + 70px);
+            height: calc(100% + 70px);
+            background: radial-gradient(
+                ellipse at 30% 30%,
+                rgba($accent, 0.85) 0%,
+                rgba($accent, 0.5) 25%,
+                rgba($accent, 0.2) 50%,
+                rgba($accent, 0.05) 75%,
+                transparent 100%
+            );
+            filter: blur(45px);
+            opacity: 0.9;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: -1;
+            transform-origin: top left;
+        }
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: -60px -20px -20px -60px;
+            background: radial-gradient(ellipse at 25% 25%, rgba($accent, 0.3) 0%, rgba($accent, 0.2) 40%, rgba($accent, 0.1) 60%, transparent 100%);
+            filter: blur(60px);
+            opacity: 0.8;
+            mix-blend-mode: screen;
+            pointer-events: none;
+            z-index: -1; 
+        }
+    }
+
+    &__image-wrapper {
+        position: relative;
+        overflow: hidden;
+        clip-path: polygon(5% 0px, 100% 0, 100% 90%, 95% 100%, 0 100%, 0% 10%);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: -40px;
+            left: -40px;
+            width: calc(100% + 80px);
+            height: calc(100% + 80px);
+            background: radial-gradient(ellipse at 30% 30%, rgba($accent, 0.6) 0%, rgba($accent, 0.3) 30%, rgba($accent, 0.1) 60%, transparent 100%);
+            filter: blur(70px);
+            opacity: 0.8;
+            z-index: -1;
+            pointer-events: none;
+        }
     }
 
     &__overlay-text {

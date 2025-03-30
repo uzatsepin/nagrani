@@ -2,9 +2,7 @@
     <section class="founder">
         <NuxtLayout name="container">
             <div class="founder__header" data-aos="fade-up">
-                <span class="founder__badge">
-                    <span>НАША КОМАНДА</span>
-                </span>
+                <OthersBadge>Наша команда</OthersBadge>
                 <h2 class="founder__title">ЗАСНОВНИК ТА <span class="founder__title-accent">КЕРІВНИК</span> ПРОЄКТУ</h2>
             </div>
 

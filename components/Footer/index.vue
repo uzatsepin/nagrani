@@ -158,9 +158,6 @@
                 <p>&copy; {{ currentYear }} NaGrani. Всі права захищені.</p>
             </div>
 	</NuxtLayout>
-        <ContactModal
-            :is-open="isContactModalOpen"
-            @close="isContactModalOpen = false" />
     </footer>
 </template>
 

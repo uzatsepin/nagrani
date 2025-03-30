@@ -4,9 +4,9 @@
         class="courses">
         <NuxtLayout name="container">
             <div class="courses__header" data-aos="fade-up">
-                <span class="courses__badge">
-                    <span>ОСВІТНІ ПРОГРАМИ</span>
-                </span>
+                <OthersBadge>
+                    Освітні програми
+                </OthersBadge>
                 <h2 class="courses__title">НАШІ <span class="courses__title-accent">КУРСИ</span></h2>
                 <p class="courses__subtitle">
                     Ми пропонуємо різноманітні програми навчання, розроблені професіоналами для розвитку практичних навичок виживання та безпеки у різних

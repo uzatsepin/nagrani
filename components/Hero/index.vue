@@ -1,11 +1,9 @@
 <template>
     <div class="hero-section">
-        <!-- Динамический фон с частицами -->
         <div
             class="hero__particles"
             id="hero__particles"></div>
 
-        <!-- Градиентные эффекты для глубины -->
         <div class="hero__gradient-left"></div>
         <div class="hero__gradient-right"></div>
 
@@ -171,12 +169,12 @@ const initParticles = () => {
         window.particlesJS("hero__particles", {
             particles: {
                 number: {
-                    value: 50, // Увеличиваем количество частиц с 30 до 50
+                    value: 50,
                     density: { enable: true, value_area: 800 }
                 },
                 color: { value: "#ffffff" },
                 opacity: {
-                    value: 0.5, // Увеличиваем непрозрачность с 0.3 до 0.5
+                    value: 0.5,
                     random: true,
                     anim: {
                         enable: true,
@@ -186,7 +184,7 @@ const initParticles = () => {
                     }
                 },
                 size: {
-                    value: 4, // Увеличиваем размер частиц с 3 до 4
+                    value: 4,
                     random: true,
                     anim: {
                         enable: true,
@@ -196,7 +194,7 @@ const initParticles = () => {
                     }
                 },
                 line_linked: {
-                    enable: true, // Добавляем соединительные линии
+                    enable: true,
                     distance: 150,
                     color: "#ffffff",
                     opacity: 0.2,
@@ -204,7 +202,7 @@ const initParticles = () => {
                 },
                 move: {
                     enable: true,
-                    speed: 1.5, // Увеличиваем скорость с 1 до 1.5
+                    speed: 1.5,
                     direction: "none",
                     random: true,
                     straight: false,
@@ -217,11 +215,11 @@ const initParticles = () => {
                 detect_on: "canvas",
                 events: {
                     onhover: {
-                        enable: true, // Добавляем интерактивность при наведении
+                        enable: true,
                         mode: "bubble"
                     },
                     onclick: {
-                        enable: true, // Интерактивность при клике
+                        enable: true,
                         mode: "push"
                     },
                     resize: true
@@ -246,14 +244,11 @@ const initParticles = () => {
     }
 };
 
-// Анимация счетчиков в статистике
 const animateCounters = () => {
-    // Определяем скорость инкремента для каждого счетчика
     const speeds = statCounters.value.map((counter) => {
-        return Math.ceil(counter.target / 100); // Делим на 100 для создания анимации примерно за 1-2 секунды
+        return Math.ceil(counter.target / 100);
     });
 
-    // Запускаем анимацию счетчика
     if (animationInterval) clearInterval(animationInterval);
 
     animationInterval = window.setInterval(() => {
@@ -261,10 +256,8 @@ const animateCounters = () => {
 
         statCounters.value.forEach((counter, index) => {
             if (counter.current < counter.target) {
-                // Инкрементируем текущее значение
                 counter.current += speeds[index];
 
-                // Убеждаемся, что не превышаем целевое значение
                 if (counter.current > counter.target) {
                     counter.current = counter.target;
                 } else {
@@ -273,7 +266,6 @@ const animateCounters = () => {
             }
         });
 
-        // Если все счетчики достигли своих целевых значений, останавливаем интервал
         if (finished && animationInterval) {
             clearInterval(animationInterval);
             animationInterval = null;
@@ -281,49 +273,22 @@ const animateCounters = () => {
     }, 20);
 };
 
-// Определяем функцию для проверки видимости элемента
 const isElementInViewport = (el: HTMLElement) => {
     const rect = el.getBoundingClientRect();
     return rect.top <= (window.innerHeight || document.documentElement.clientHeight) && rect.bottom >= 0;
 };
 
 onMounted(() => {
-    // Инициализация эффекта parallax
-    const handleScroll = () => {
-        if (heroImage.value) {
-            const scrollPos = window.scrollY;
-            const tiltFactor = scrollPos * 0.05;
-            if (tiltFactor < 20) {
-                heroImage.value.style.transform = `perspective(1000px) rotateX(${tiltFactor}deg)`;
-            }
-        }
-
-        // Проверяем, виден ли блок статистики и запускаем анимацию счетчиков
-        const statsElement = document.querySelector(".hero__stats");
-        if (statsElement && isElementInViewport(statsElement as HTMLElement) && !animationInterval) {
-            animateCounters();
-        }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    scrollListener = handleScroll;
-
-    // Для particles.js нужно добавить скрипт в head и инициализировать после загрузки
-    if (process.client) {
-        // Проверяем, загружен ли уже скрипт
-        if (!document.getElementById("particles-js-script")) {
-            const script = document.createElement("script");
-            script.id = "particles-js-script";
-            script.src = "https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js";
-            script.onload = initParticles;
-            document.head.appendChild(script);
-        } else {
-            // Если скрипт уже загружен, просто инициализируем particles
-            initParticles();
-        }
+    if (!document.getElementById("particles-js-script")) {
+        const script = document.createElement("script");
+        script.id = "particles-js-script";
+        script.src = "https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js";
+        script.onload = initParticles;
+        document.head.appendChild(script);
+    } else {
+        initParticles();
     }
 
-    // Запускаем анимацию счетчиков на странице загрузки, если блок статистики виден
     setTimeout(() => {
         const statsElement = document.querySelector(".hero__stats");
         if (statsElement && isElementInViewport(statsElement as HTMLElement)) {
@@ -547,7 +512,6 @@ onUnmounted(() => {
 
     &__image-wrapper {
         position: relative;
-        border-radius: 12px;
         overflow: hidden;
         transform-style: preserve-3d;
 
@@ -575,7 +539,6 @@ onUnmounted(() => {
         position: absolute;
         inset: 0;
         border: 3px solid rgba($accent, 0.3);
-        border-radius: 12px;
         z-index: 2;
         pointer-events: none;
 
@@ -593,14 +556,12 @@ onUnmounted(() => {
             top: -3px;
             left: -3px;
             border-width: 3px 0 0 3px;
-            border-radius: 8px 0 0 0;
         }
 
         &::after {
             bottom: -3px;
             right: -3px;
             border-width: 0 3px 3px 0;
-            border-radius: 0 0 8px 0;
         }
     }
 

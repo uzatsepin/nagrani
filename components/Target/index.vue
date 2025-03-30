@@ -7,10 +7,10 @@
                 <OthersBadge>Цільова аудиторія</OthersBadge>
                 <div>
                     <h2 class="target__title">ДЛЯ <span class="target__title-accent">КОГО</span> ЦЕЙ ПРОЄКТ</h2>
-                <p class="target__subtitle">
-                    Наші програми розроблені для різних категорій людей, незалежно від їхнього досвіду та підготовки. Кожен знайде програму, яка відповідає саме
-                    його потребам.
-                </p>
+                    <p class="target__subtitle">
+                        Наші програми розроблені для різних категорій людей, незалежно від їхнього досвіду та підготовки. Кожен знайде програму, яка відповідає саме
+                        його потребам.
+                    </p>
                 </div>
             </div>
 
@@ -24,7 +24,7 @@
                 </button>
             </div>
 
-                <div :key="selectedGroup" class="target__main-card" data-aos="zoom-in">
+                <div :key="selectedGroup" class="target__main-card" data-aos="zoom-in" ref="mainCardRef">
                     <div class="target__main-content">
                         <div class="target__main-icon">
                             <component :is="targetGroups[selectedGroup].icon" />
@@ -86,6 +86,7 @@ import WarriorIcon from '~/components/Icons/WarriorIcon.vue';
 import CorporateIcon from '~/components/Icons/CorporateIcon.vue';
 
 const selectedGroup = ref(0);
+const mainCardRef = ref<HTMLElement | null>(null);
 
 const targetGroups = [
     {
@@ -149,8 +150,23 @@ const stats = [
     { value: 7, title: "Років досвіду", unit: "" }
 ];
 
-const selectGroup = (index) => {
+
+const selectGroup = (index: number) => {
     selectedGroup.value = index;
+    
+    nextTick(() => {
+        if (mainCardRef.value) {
+            const elementRect = mainCardRef.value.getBoundingClientRect();
+            const absoluteElementTop = elementRect.top + window.pageYOffset;
+            
+            const offset = 130;
+            
+            window.scrollTo({
+                top: absoluteElementTop - offset,
+                behavior: 'smooth'
+            });
+        }
+    });
 };
 </script>
 
@@ -218,7 +234,6 @@ const selectGroup = (index) => {
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: 600;
             transition: all 0.3s ease;
             
             &:hover {
@@ -251,6 +266,10 @@ const selectGroup = (index) => {
     &__main-content {
         flex: 1;
         padding: 40px;
+
+        @media screen and (max-width: 768px) {
+            padding: 24px;
+        }
     }
     
     &__main-icon {

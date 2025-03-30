@@ -280,11 +280,10 @@ const handleTabChange = (value: string) => {
     &__list {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 4px;
+        gap: 16px;
         width: 100%;
         max-width: 800px;
         margin: 0 auto;
-        background-color: #1a1a1a;
         padding: 4px;
         border-radius: 8px;
 
@@ -294,21 +293,27 @@ const handleTabChange = (value: string) => {
     }
 
     &__tab {
+        padding: 12px 20px;
+        border: 1px solid rgba($accent, 0.3);
+        background: transparent;
+        color: #d1d1d1;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
         display: flex;
         align-items: center;
-        justify-content: center;
         gap: 8px;
-        padding: 8px 12px;
-        font-size: 14px;
-        border-radius: 4px;
-        background-color: transparent;
-        color: white;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s;
+        
+        &:hover {
+            border-color: $accent;
+            color: white;
+            background: rgba($accent, 0.1);
+        }
 
         &--active {
-            background-color: $accent;
+            background: $accent;
+            border-color: $accent;
             color: white;
         }
     }

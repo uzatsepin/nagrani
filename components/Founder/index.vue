@@ -9,10 +9,12 @@
             <div class="founder__content">
                 <div class="founder__image-container" data-aos="fade-right">
                     <div class="founder__image-wrapper">
+                        <div class="founder__image-glow"></div>
                         <img
                             src="/images/founder.webp"
                             alt="Founder portrait"
                             class="founder__image" />
+                        <div class="founder__image-frame"></div>
                     </div>
 
                     <div class="founder__name-badge">
@@ -47,11 +49,6 @@
                             <p class="founder__achievement-description">{{ achievement.description }}</p>
                         </div>
                     </div>
-
-                    <!-- <p class="founder__paragraph">
-                        Під керівництвом Олександра команда професіоналів розробляє та вдосконалює програми навчання, які відповідають сучасним викликам і
-                        загрозам. Кожна програма базується на реальному досвіді та практичних знаннях.
-                    </p> -->
                 </div>
             </div>
         </NuxtLayout>
@@ -85,47 +82,74 @@ const achievements = [
 
 <style lang="scss" scoped>
 .founder {
-    padding: 48px 0;
+    padding: 60px 0;
     background-color: #0a0a0a;
+    position: relative;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 30% 50%, rgba(211, 111, 13, 0.05) 0%, transparent 60%);
+        pointer-events: none;
+    }
 
     &__header {
         text-align: center;
-        margin-bottom: 64px;
+        margin-bottom: 70px;
     }
 
     &__badge {
         display: inline-block;
         background-color: rgba($accent, 0.2);
-        padding: 4px 16px;
+        padding: 6px 18px;
         border-radius: 50px;
-        margin-bottom: 16px;
+        margin-bottom: 18px;
+        box-shadow: 0 0 15px rgba($accent, 0.2);
 
         span {
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 15px;
+            font-weight: 600;
             color: $accent;
+            letter-spacing: 0.5px;
         }
     }
 
     &__title {
         font-size: 32px;
-        font-family: "Russo One", sans-serif;
         color: white;
         margin-bottom: 24px;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        letter-spacing: 1px;
 
         @media (min-width: 768px) {
-            font-size: 36px;
+            font-size: 38px;
         }
 
         &-accent {
             color: $accent;
+            position: relative;
+            
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: -4px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: $accent;
+                opacity: 0.6;
+            }
         }
     }
 
     &__content {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 50px;
 		overflow-x: hidden;
 
         @media (min-width: 992px) {
@@ -141,77 +165,151 @@ const achievements = [
     &__image-wrapper {
 		position: relative;
 		overflow: hidden;
-		clip-path: polygon(5% 0px, 100% 0, 100% 90%, 95% 100%, 0 100%, 0% 10%);
-		height: 600px; /* или другое значение, которое вам подходит */
+		height: 600px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 		
 		@media (max-width: 768px) {
-			height: 400px; /* меньшая высота для мобильных устройств */
+			height: 450px;
 		}
 	}
+    
+    &__image-frame {
+        position: absolute;
+        inset: 0;
+        border: 3px solid rgba(211, 111, 13, 0.3);
+        z-index: 2;
+        pointer-events: none;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-style: solid;
+            border-color: $accent;
+        }
+
+        &::before {
+            top: -3px;
+            left: -3px;
+            border-width: 3px 0 0 3px;
+        }
+
+        &::after {
+            bottom: -3px;
+            right: -3px;
+            border-width: 0 3px 3px 0;
+        }
+    }
+    
+    &__image-glow {
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: -50%;
+        left: -50%;
+        background: radial-gradient(circle at 50% 50%, rgba(211, 111, 13, 0.5) 0%, transparent 50%);
+        z-index: 1;
+        transform: scale(0.8);
+        animation: glowPulse 8s infinite alternate ease-in-out;
+        mix-blend-mode: overlay;
+        pointer-events: none;
+    }
 
     &__image {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		object-position: center top !important; /* Добавлен !important для перезаписи встроенных стилей */
+		object-position: center top !important;
 		display: block;
 		position: absolute;
 		top: 0;
 		left: 0;
+        transition: transform 0.5s ease-in-out;
+        
+        &:hover {
+            transform: scale(1.03);
+        }
 	}
 
     &__name-badge {
         position: absolute;
         bottom: 24px;
         right: 24px;
-        background-color: #1a1a1a;
-        padding: 16px;
+        background-color: rgba(26, 26, 26, 0.9);
+        backdrop-filter: blur(5px);
+        padding: 18px;
         clip-path: polygon(5% 0px, 100% 0, 100% 90%, 95% 100%, 0 100%, 0% 10%);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        border-left: 3px solid rgba($accent, 0.6);
+        z-index: 3;
+
+        @media screen and (max-width: 768px) {
+            border-left: 3px solid rgba($accent, 1);
+        }
     }
 
     &__name {
-        font-family: "Russo One", sans-serif;
         color: white;
-        font-size: 18px;
-        margin-bottom: 4px;
+        font-size: 20px;
+        margin-bottom: 6px;
+        letter-spacing: 0.5px;
     }
 
     &__position {
         color: $accent;
         font-size: 14px;
+        letter-spacing: 1px;
+        font-weight: 600;
     }
 
     &__bio {
-        padding: 16px 0;
+        padding: 20px 0;
     }
 
     &__section-title {
-        font-family: "Russo One", sans-serif;
-        font-size: 24px;
+        font-size: 26px;
         color: white;
-        margin-bottom: 24px;
+        margin-bottom: 28px;
+        position: relative;
+        display: inline-block;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(to right, $accent, transparent);
+        }
     }
 
     &__paragraph {
         color: #d1d1d1;
-        margin-bottom: 16px;
-        line-height: 1.6;
+        margin-bottom: 18px;
+        line-height: 1.7;
+        font-size: 16px;
     }
 
     &__quote {
-        color: #d1d1d1;
-        margin-bottom: 24px;
-        line-height: 1.6;
+        color: #e6e6e6;
+        margin: 28px 0;
+        line-height: 1.7;
         font-style: italic;
         border-left: 3px solid $accent;
-        padding-left: 16px;
+        padding: 12px 0 12px 20px;
+        background-color: rgba(211, 111, 13, 0.05);
+        border-radius: 0 8px 8px 0;
+        position: relative;
     }
 
     &__achievements {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 24px;
-        margin: 32px 0;
+        margin: 36px 0;
 
 		@media screen and (max-width: 767px) {
 			grid-template-columns: 1fr;
@@ -219,30 +317,68 @@ const achievements = [
     }
 
     &__achievement {
-        background-color: #1a1a1a;
-        padding: 16px;
+        background-color: rgba(26, 26, 26, 0.6);
+        padding: 20px;
         border-radius: 8px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        position: relative;
+        overflow: hidden;
+        
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: $accent;
+            opacity: 0.6;
+        }
+        
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
     }
 
     &__achievement-header {
         display: flex;
         align-items: center;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
     }
 
     &__achievement-icon {
         color: $accent;
-        margin-right: 12px;
+        margin-right: 14px;
+        background-color: rgba($accent, 1);
+        padding: 8px;
+        border-radius: 50%;
     }
 
     &__achievement-title {
-        font-family: "Russo One", sans-serif;
         color: white;
+        font-size: 18px;
     }
 
     &__achievement-description {
-        color: #a0a0a0;
-        font-size: 14px;
+        color: #b0b0b0;
+        font-size: 15px;
+    }
+}
+
+@keyframes glowPulse {
+    0% {
+        opacity: 0.4;
+        transform: scale(0.8) rotate(0deg);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1) rotate(5deg);
+    }
+    100% {
+        opacity: 0.4;
+        transform: scale(0.8) rotate(0deg);
     }
 }
 </style>

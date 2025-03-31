@@ -162,9 +162,7 @@ const statCounters = ref([
 let scrollListener: ((event: Event) => void) | null = null;
 let animationInterval: number | null = null;
 
-// Проверка для particles.js
 const initParticles = () => {
-    // Проверяем, существует ли глобальный объект particlesJS
     if (typeof window !== "undefined" && window.particlesJS) {
         window.particlesJS("hero__particles", {
             particles: {
@@ -294,7 +292,7 @@ onMounted(() => {
         if (statsElement && isElementInViewport(statsElement as HTMLElement)) {
             animateCounters();
         }
-    }, 1000);
+    }, 500);
 });
 
 onUnmounted(() => {
@@ -639,7 +637,7 @@ onUnmounted(() => {
         padding: 16px;
         margin-top: 10px;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(4px); // Добавляем эффект размытия фона
+        backdrop-filter: blur(4px);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
 
         &:hover {
@@ -652,7 +650,6 @@ onUnmounted(() => {
             grid-column: span 2;
         }
 
-        // Добавляем подсветку с акцентным цветом
         &::before {
             content: "";
             position: absolute;
@@ -670,13 +667,13 @@ onUnmounted(() => {
         position: relative;
 
         &-number {
-            font-size: 24px; // Немного увеличиваем размер
+            font-size: 24px;
             color: $accent;
             margin-bottom: 4px;
-            text-shadow: 0 0 10px rgba($accent, 0.5); // Добавляем свечение
+            text-shadow: 0 0 10px rgba($accent, 0.5);
 
             @media (min-width: 768px) {
-                font-size: 30px; // Увеличиваем размер для больших экранов
+                font-size: 30px;
             }
         }
 

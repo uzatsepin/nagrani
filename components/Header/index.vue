@@ -69,11 +69,15 @@
                 <div class="header__buttons">
                     <div class="header__social">
                         <NuxtLink
-                            class="header__social-link instagram"
-                            to="https://www.instagram.com/naukavizhivat_nagrani/" target="_blank"></NuxtLink>
+                            class="header__social-link"
+                            to="https://www.instagram.com/naukavizhivat_nagrani/" target="_blank">
+                                <Icon name="line-md:instagram" />
+                            </NuxtLink>
                         <NuxtLink
-                            class="header__social-link telegram"
-                            to="#"></NuxtLink>
+                            class="header__social-link"
+                            to="#">
+                                <Icon name="line-md:telegram" />
+                            </NuxtLink>
                     </div>
                     <OthersPrimaryButton @click="closeMenu"> Записатись на курс </OthersPrimaryButton>
                 </div>
@@ -313,26 +317,21 @@ onUnmounted(() => {
             background-repeat: no-repeat;
             transition: background-image 250ms ease-in-out;
 
+            & span {
+                width: 24px;
+                height: 24px;
+                opacity: 0.7;
+                transition: opacity 250ms ease-in-out;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+
             @media (max-width: 992px) {
                 width: 32px;
                 height: 32px;
                 background-size: contain;
-            }
-
-            &.telegram {
-                background-image: url("./icons/telegram-icon.svg");
-            }
-
-            &.instagram {
-                background-image: url("./icons/instagram-icon.svg");
-            }
-
-            &.telegram:hover {
-                background-image: url("./icons/telegram-icon-hover.svg");
-            }
-
-            &.instagram:hover {
-                background-image: url("./icons/instagram-icon-hover.svg");
             }
         }
     }

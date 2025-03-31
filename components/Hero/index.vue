@@ -154,13 +154,17 @@
 import { ref, onMounted, onUnmounted } from "vue";
 
 const heroImage = ref<HTMLImageElement | null>(null);
-const statCounters = ref([
+    const statCounters = ref([
     { current: 0, target: 5000, suffix: "+" },
     { current: 0, target: 15, suffix: "+" },
     { current: 0, target: 97, suffix: "%" }
 ]);
+
 let scrollListener: ((event: Event) => void) | null = null;
+
 let animationInterval: number | null = null;
+let animationStarted = false;
+
 
 const initParticles = () => {
     if (typeof window !== "undefined" && window.particlesJS) {
@@ -243,6 +247,10 @@ const initParticles = () => {
 };
 
 const animateCounters = () => {
+    if (animationStarted) return;
+    
+    animationStarted = true;
+    
     const speeds = statCounters.value.map((counter) => {
         return Math.ceil(counter.target / 100);
     });
@@ -287,11 +295,18 @@ onMounted(() => {
         initParticles();
     }
 
-    setTimeout(() => {
+    const handleScroll = () => {
         const statsElement = document.querySelector(".hero__stats");
-        if (statsElement && isElementInViewport(statsElement as HTMLElement)) {
+        if (statsElement && isElementInViewport(statsElement as HTMLElement) && !animationStarted) {
             animateCounters();
         }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    scrollListener = handleScroll;
+
+    setTimeout(() => {
+        handleScroll();
     }, 500);
 });
 

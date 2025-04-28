@@ -25,12 +25,19 @@ export default defineNuxtConfig({
             }
         ]
     },
+    site: {
+      name: 'NaGrani',
+      description:
+          'NaGrani – школа виживання й безпеки. Комплексні курси виживання в екстремальних умовах, тактичної медицини та самозахисту від досвідчених інструкторів.',
+      url: 'https://nagrani.life',
+      defaultLocale: 'uk',
+  },
     app: {
         head: {
           htmlAttrs: {
             lang: 'uk'
           },
-          title: 'NaGrani - Курси з виживання та безпеки',
+          title: 'Курси виживання, тактична медицина та самозахист',
           meta: [
             { name: 'robots', content: 'index, follow' },
             { charset: 'utf-8' },
@@ -41,14 +48,13 @@ export default defineNuxtConfig({
               content: 'Школа виживання NaGrani - комплексні курси з виживання в екстремальних умовах, тактичної медицини, самозахисту та безпеки. Практичні навички та реальні кейси від професійних інструкторів з досвідом.'
             },
             { name: 'author', content: 'Віталій Олійник - засновник та головний інструктор NaGrani' },
-            // Open Graph / Соціальні мережі
             { property: 'og:type', content: 'website' },
-            { property: 'og:title', content: 'NaGrani - Школа виживання' },
+            { property: 'og:title', content: 'Курси виживання, тактична медицина та самозахист' },
             { 
               property: 'og:description', 
               content: 'Навчальні курси, які допоможуть вижити в будь-яких ситуаціях - від екстремальних природних умов до надзвичайних ситуацій у місті.'
             },
-            { property: 'og:url', content: 'https://nagrani.com.ua' },
+            { property: 'og:url', content: 'https://nagrani.life' },
             { property: 'og:image', content: '/images/og-image.jpg' }
           ],
           link: [
@@ -57,10 +63,10 @@ export default defineNuxtConfig({
             { rel: 'shortcut icon', href: '/favicon/favicon.ico' },
             { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon/apple-touch-icon.png' },
             { rel: 'manifest', href: '/favicon/site.webmanifest' },
-            { rel: 'canonical', href: 'https://nagrani.com.ua' }
+            { rel: 'canonical', href: 'https://nagrani.life' }
           ]
         },
       },
 
-    modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "nuxt-aos", '@pinia/nuxt']
+    modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "nuxt-aos", '@pinia/nuxt', '@nuxtjs/seo']
 });

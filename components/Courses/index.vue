@@ -70,6 +70,43 @@ const { data, status, error, refresh } = await useAsyncData("courses", async () 
     await coursesStore.fetchCourses();
     return coursesStore.courses;
 });
+
+useSchemaOrg({
+    "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": courses.value
+            .filter(course => course.status === 'published')
+            .map((course, index) => ({
+                "@type": "ListItem",
+                "position": index + 1,
+                "item": {
+                    "@type": "Course",
+                    "name": course.title,
+                    "description": course.short_description || course.title,
+                    "provider": {
+                        "@type": "Organization",
+                        "name": "NaGrani",
+                        "sameAs": "https://nagrani.com.ua"
+                    },
+                    // Добавляем цену, если она есть
+                    ...(course.price && {
+                        "offers": {
+                            "@type": "Offer",
+                            "price": course.price,
+                            "priceCurrency": "UAH"
+                        }
+                    }),
+                    // Добавляем рейтинг, если он есть
+                    ...(course.rating && {
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": parseFloat(course.rating) || 5,
+                            "ratingCount": parseInt(course.students || "10")
+                        }
+                    })
+                }
+            }))
+})
 </script>
 
 <style lang="scss" scoped>

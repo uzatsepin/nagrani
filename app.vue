@@ -7,4 +7,7 @@
     </div>
 </template>
 <script setup lang="ts">
+const contactsStore = useContactsStore();
+
+await contactsStore.fetchContacts();
 </script>

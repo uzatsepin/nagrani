@@ -128,9 +128,10 @@
                                 size="18"
                                 class="footer__contact-icon" />
                             <a
-                                href="tel:+380501234567"
+                                :href="`tel:${contacts.phone}`"
+                                v-if="contacts.phone"
                                 class="footer__link"
-                                >+38 (050) 123-45-67</a
+                                >{{ contacts.phone }}</a
                             >
                         </li>
                         <li class="footer__contact-item">
@@ -139,9 +140,10 @@
                                 size="18"
                                 class="footer__contact-icon" />
                             <a
-                                href="mailto:info@budda.life"
+                                :href="`mailto:${contacts.email}`"
+                                v-if="contacts.email"
                                 class="footer__link"
-                                >info@budda.life</a
+                                >{{contacts.email}}</a
                             >
                         </li>
                     </ul>
@@ -161,7 +163,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "vue";
+const contactsStore = useContactsStore();
+
+const { contacts } = storeToRefs(contactsStore)
 
 const isContactModalOpen = ref(false);
 const currentYear = computed(() => new Date().getFullYear());

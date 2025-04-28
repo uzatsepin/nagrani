@@ -3,6 +3,11 @@ export default defineNuxtConfig({
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },
     css: ["~/assets/style/main.scss"],
+    runtimeConfig: {
+      public: {
+          directusUrl: process.env.NUXT_DIRECTUS_API_BASE || 'http://localhost:8055',
+      } 
+  },
     vite: {
         css: {
             preprocessorOptions: {
@@ -57,5 +62,5 @@ export default defineNuxtConfig({
         },
       },
 
-    modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "nuxt-aos"]
+    modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "nuxt-aos", '@pinia/nuxt']
 });

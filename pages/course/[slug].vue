@@ -124,10 +124,6 @@
                                         <Icon name="lucide:award" size="18" />
                                         <span>Рейтинг: {{ course.rating }}</span>
                                     </li>
-                                    <li class="info-item">
-                                        <Icon name="lucide:map-pin" size="18" />
-                                        <span>Локація: Київ</span>
-                                    </li>
                                 </ul>
                                 
                                 <div class="price-section">
@@ -509,6 +505,13 @@ watch(() => route.params.slug, async (newSlug) => {
             opacity: 0;
             transition: opacity 0.3s;
             
+            // На мобильных всегда показываем кнопку презентации
+            @media (max-width: 768px) {
+                &.presentation-overlay {
+                    opacity: 1;
+                }
+            }
+            
             &:hover {
                 opacity: 1;
             }
@@ -534,6 +537,19 @@ watch(() => route.params.slug, async (newSlug) => {
                 
                 span {
                     font-size: 14px;
+                }
+                
+                // Улучшенные стили для мобильных
+                @media (max-width: 768px) {
+                    &.presentation-button {
+                        padding: 12px 20px;
+                        border-radius: 8px;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                        
+                        span {
+                            font-size: 13px;
+                        }
+                    }
                 }
             }
             
@@ -612,7 +628,7 @@ watch(() => route.params.slug, async (newSlug) => {
 
     :deep(blockquote) {
         padding: 12px 16px;
-        background-color: darken($secondBlack, 5%);
+        background-color: color-mix(in srgb, $secondBlack 95%, black 5%);
         border-left: 4px solid $accent;
     }
 }

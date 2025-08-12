@@ -68,7 +68,7 @@
                                 class="hero__btn-icon" />
                         </button>
 
-                        <button class="btn-secondary hero__btn-outline">
+                        <button class="btn-secondary hero__btn-outline" disabled>
                             <Icon
                                 name="lucide:play"
                                 size="18"
@@ -181,7 +181,9 @@ const scrollToSection = (sectionId: string) => {
 }
 
 const initParticles = () => {
+    //@ts-ignore
     if (typeof window !== "undefined" && window.particlesJS) {
+        //@ts-ignore
         window.particlesJS("hero__particles", {
             particles: {
                 number: {
@@ -765,7 +767,7 @@ onUnmounted(() => {
     overflow: hidden;
 
     &:hover {
-        background-color: darken($accent, 5%);
+        background-color: color-mix(in srgb, $accent 95%, black 5%);
         transform: translateY(-2px);
     }
 

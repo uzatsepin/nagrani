@@ -30,7 +30,7 @@
                         <li class="header__list-item">
                             <a
                                 class="header__list-item-link"
-                                href="#"
+                                href="/#"
                                 @click="closeMenu"
                                 >Головна</a
                             >
@@ -38,7 +38,7 @@
                         <li class="header__list-item">
                             <a
                                 class="header__list-item-link"
-                                href="#about"
+                                href="/#about"
                                 @click="closeMenu"
                                 >Про проєкт</a
                             >
@@ -46,7 +46,7 @@
                         <li class="header__list-item">
                             <a
                                 class="header__list-item-link"
-                                href="#directions"
+                                href="/#directions"
                                 @click="closeMenu"
                                 >Напрямки</a
                             >
@@ -54,7 +54,7 @@
                         <li class="header__list-item">
                             <a
                                 class="header__list-item-link"
-                                href="#target"
+                                href="/#target"
                                 @click="closeMenu"
                                 >Для кого</a
                             >
@@ -62,7 +62,7 @@
                         <li class="header__list-item">
                             <a
                                 class="header__list-item-link"
-                                href="#courses"
+                                href="/#courses"
                                 @click="closeMenu"
                                 >Курси</a
                             >

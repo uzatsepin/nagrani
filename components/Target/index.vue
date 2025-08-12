@@ -379,7 +379,7 @@ const selectGroup = (index: number) => {
         
         &.active {
             border-left-color: $accent;
-            background: linear-gradient(145deg, darken($accent, 30%), darken($accent, 35%));
+            background: linear-gradient(145deg, color-mix(in srgb, $accent 70%, black 30%), color-mix(in srgb, $accent 65%, black 35%));
             transform: translateY(-8px);
             
             .target__card-icon {

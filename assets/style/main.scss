@@ -23,6 +23,6 @@ a {
     border-radius: 4px;
 
     &:hover {
-        background: darken($accent, 10%);
+        background: color-mix(in srgb, $accent 90%, black 10%);
     }
 }

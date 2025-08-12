@@ -20,7 +20,7 @@
                                 size="20" />
                         </NuxtLink>
                         <a
-                            href="https://t.me"
+                            href="https://t.me/nagranivyzhyvannya"
                             target="_blank"
                             rel="noopener noreferrer"
                             class="footer__social-link">
@@ -115,14 +115,14 @@
                 <div class="footer__column">
                     <h3 class="footer__heading">КОНТАКТИ</h3>
                     <ul class="footer__contact-list">
-                        <li class="footer__contact-item">
+                        <!-- <li class="footer__contact-item">
                             <Icon
                                 name="lucide:map-pin"
                                 size="18"
                                 class="footer__contact-icon" />
                             <span>вул. Виживання, 42, Київ, 01001, Україна</span>
-                        </li>
-                        <li class="footer__contact-item">
+                        </li> -->
+                        <!-- <li class="footer__contact-item">
                             <Icon
                                 name="lucide:phone"
                                 size="18"
@@ -133,7 +133,7 @@
                                 class="footer__link"
                                 >{{ contacts.phone }}</a
                             >
-                        </li>
+                        </li> -->
                         <li class="footer__contact-item">
                             <Icon
                                 name="lucide:mail"
@@ -149,7 +149,7 @@
                     </ul>
 
                     <OthersPrimaryButton
-                        @click="isContactModalOpen = true">
+                        @click="contactsStore.contactPopup = true">
                         ЗАЛИШИЛИСЬ ПИТАННЯ?
                     </OthersPrimaryButton>
                 </div>
@@ -167,7 +167,6 @@ const contactsStore = useContactsStore();
 
 const { contacts } = storeToRefs(contactsStore)
 
-const isContactModalOpen = ref(false);
 const currentYear = computed(() => new Date().getFullYear());
 </script>
 

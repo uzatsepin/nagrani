@@ -76,5 +76,5 @@ export default defineNuxtConfig({
         }
     },
 
-    modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "nuxt-aos", "@pinia/nuxt", "@nuxtjs/seo"]
+    modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "nuxt-aos", "@pinia/nuxt", "@nuxtjs/seo", "@vueuse/nuxt"]
 });

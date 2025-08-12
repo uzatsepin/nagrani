@@ -1,12 +1,12 @@
 <template>
     <NuxtLayout name="container">
         <header class="header">
-            <div class="header__logo">
+            <NuxtLink to="/" class="header__logo">
                 <NuxtImg
                     src="/images/logo.svg"
                     alt="logo"
                     width="125" />
-            </div>
+            </NuxtLink>
 
             <button
                 class="header__burger"
@@ -68,18 +68,22 @@
 
                 <div class="header__buttons">
                     <div class="header__social">
-                        <NuxtLink
+                        <a
+                            rel="noopener, noreferrer"
+                            target="_blank"
                             class="header__social-link"
-                            to="https://www.instagram.com/naukavizhivat_nagrani/" target="_blank">
-                                <Icon name="line-md:instagram" />
-                            </NuxtLink>
-                        <NuxtLink
+                            href="https://www.instagram.com/naukavizhivat_nagrani/">
+                            <Icon name="line-md:instagram" />
+                        </a>
+                        <a
+                            rel="noopener, noreferrer"
                             class="header__social-link"
-                            to="#">
-                                <Icon name="line-md:telegram" />
-                            </NuxtLink>
+                            target="_blank"
+                            href="https://t.me/nagranivyzhyvannya">
+                            <Icon name="line-md:telegram" />
+                        </a>
                     </div>
-                    <OthersPrimaryButton @click="closeMenu"> Записатись на курс </OthersPrimaryButton>
+                    <OthersPrimaryButton @click="contactStore.contactPopup = true"> Записатись на курс </OthersPrimaryButton>
                 </div>
             </div>
         </header>
@@ -87,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from "vue";
+const contactStore = useContactsStore();
 
 const isMenuOpen = ref(false);
 

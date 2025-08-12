@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <OthersPrimaryButton>
+            <OthersPrimaryButton @click="navigateToCourse(course.slug)">
                 ДЕТАЛЬНІШЕ
                 <Icon
                     name="lucide:chevron-right"
@@ -71,6 +71,10 @@ defineProps<{
     course: Course;
     index: number;
 }>();
+
+const navigateToCourse = (slug: string) => {
+    useRouter().push(`/course/${slug}`);
+};
 
 const hoveredCard = ref<number | null>(null);
 

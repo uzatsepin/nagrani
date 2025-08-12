@@ -1,5 +1,6 @@
 <template>
     <slot />
+    <OthersToastNotification />
 </template>
 
 <script setup lang="ts">

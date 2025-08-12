@@ -60,7 +60,7 @@
                         data-aos="fade-up"
                         data-aos-duration="1400"
                         data-aos-delay="400">
-                        <button class="btn-primary hero__btn">
+                        <button class="btn-primary hero__btn" @click="scrollToSection('courses')">
                             Почати навчання
                             <Icon
                                 name="lucide:arrow-right"
@@ -171,6 +171,12 @@ let scrollListener: ((event: Event) => void) | null = null;
 let animationInterval: number | null = null;
 let animationStarted = false;
 
+const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+    }
+}
 
 const initParticles = () => {
     if (typeof window !== "undefined" && window.particlesJS) {

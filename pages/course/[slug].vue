@@ -1,0 +1,780 @@
+<template>
+    <div class="course-page">
+        <!-- Header -->
+        <Header />
+        
+        <!-- Loading State -->
+        <div v-if="isLoading" class="loading-state">
+            <NuxtLayout name="container">
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <p>Завантаження курсу...</p>
+                </div>
+            </NuxtLayout>
+        </div>
+
+        <!-- Error State -->
+        <div v-else-if="error" class="error-state">
+            <NuxtLayout name="container">
+                <div class="error-content">
+                    <Icon name="lucide:alert-circle" size="48" class="error-icon" />
+                    <h2>Курс не знайдено</h2>
+                    <p>На жаль, курс з такою адресою не існує або був видалений.</p>
+                    <NuxtLink to="/" class="back-link">
+                        <OthersPrimaryButton>
+                            Повернутися на головну
+                        </OthersPrimaryButton>
+                    </NuxtLink>
+                </div>
+            </NuxtLayout>
+        </div>
+
+        <!-- Course Content -->
+        <div v-else-if="course" class="course-content">
+            <!-- Hero Section -->
+            <section class="course-hero">
+                <NuxtLayout name="container">
+                    <div class="course-hero__grid">
+                        <div class="course-hero__content">
+                            <div class="course-hero__breadcrumbs">
+                                <NuxtLink to="/" class="breadcrumb-link">Головна</NuxtLink>
+                                <Icon name="lucide:chevron-right" size="16" />
+                                <NuxtLink to="/#courses" class="breadcrumb-link">Курси</NuxtLink>
+                                <Icon name="lucide:chevron-right" size="16" />
+                                <span class="breadcrumb-current">{{ course.title }}</span>
+                            </div>
+                            
+                            <h1 class="course-hero__title">{{ course.title }}</h1>
+                            <p class="course-hero__short-desc">{{ course.short_description }}</p>
+                            
+                            <div class="course-hero__meta">
+                                <div class="meta-item">
+                                    <Icon name="lucide:clock" size="18" />
+                                    <span>{{ course.duration }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <Icon name="lucide:users" size="18" />
+                                    <span>{{ course.students }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <Icon name="lucide:star" size="18" />
+                                    <span>{{ course.rating }}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="course-hero__price">
+                                <span v-if="course.old_price && course.old_price > course.price" class="old-price">
+                                    {{ formatPrice(course.old_price) }} ₴
+                                </span>
+                                <span class="current-price">{{ formatPrice(course.price) }} ₴</span>
+                            </div>
+                            
+                            <OthersPrimaryButton 
+                                class="course-hero__cta"
+                                @click="openContactModal"
+                            >
+                                ХОЧУ НА ІНТЕНСИВ
+                            </OthersPrimaryButton>
+                        </div>
+                        
+                        <div class="course-hero__media">
+                            <div class="media-container">
+                                <NuxtImg
+                                    :src="getDirectusImageUrl(course.image)"
+                                    :alt="course.title"
+                                    class="course-image"
+                                    width="600"
+                                    height="400"
+                                />
+                                <!-- Placeholder for video - можно заменить на видео если есть -->
+                                <div class="video-overlay">
+                                    <button class="play-button" @click="playVideo">
+                                        <Icon name="lucide:play" size="24" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </NuxtLayout>
+            </section>
+
+            <!-- Course Description -->
+            <section class="course-description">
+                <NuxtLayout name="container">
+                    <div class="course-description__grid">
+                        <div class="course-description__content">
+                            <h2 class="section-title">Про курс</h2>
+                            <div class="description-text" v-html="course.description"></div>
+                        </div>
+                        
+                        <div class="course-description__sidebar">
+                            <div class="info-card">
+                                <h3 class="info-card__title">Деталі курсу</h3>
+                                <ul class="info-list">
+                                    <li class="info-item">
+                                        <Icon name="lucide:calendar" size="18" />
+                                        <span>Тривалість: {{ course.duration }}</span>
+                                    </li>
+                                    <li class="info-item">
+                                        <Icon name="lucide:users" size="18" />
+                                        <span>Учасників: {{ course.students }}</span>
+                                    </li>
+                                    <li class="info-item">
+                                        <Icon name="lucide:award" size="18" />
+                                        <span>Рейтинг: {{ course.rating }}</span>
+                                    </li>
+                                    <li class="info-item">
+                                        <Icon name="lucide:map-pin" size="18" />
+                                        <span>Локація: Київ</span>
+                                    </li>
+                                </ul>
+                                
+                                <div class="price-section">
+                                    <div class="price-display">
+                                        <span v-if="course.old_price && course.old_price > course.price" class="old-price">
+                                            {{ formatPrice(course.old_price) }} ₴
+                                        </span>
+                                        <span class="current-price">{{ formatPrice(course.price) }} ₴</span>
+                                    </div>
+                                    
+                                    <OthersPrimaryButton 
+                                        class="sidebar-cta"
+                                        @click="openContactModal"
+                                    >
+                                        ЗАПИСАТИСЯ
+                                    </OthersPrimaryButton>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </NuxtLayout>
+            </section>
+
+            <!-- What You'll Learn Section -->
+            <section class="course-benefits">
+                <NuxtLayout name="container">
+                    <h2 class="section-title">Що ви отримаєте</h2>
+                    <div class="benefits-grid">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <Icon name="lucide:brain" size="32" />
+                            </div>
+                            <h3>Практичні навички</h3>
+                            <p>Реальні знання, які можна застосувати в життєвих ситуаціях</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <Icon name="lucide:shield-check" size="32" />
+                            </div>
+                            <h3>Сертифікат</h3>
+                            <p>Документ про проходження курсу від професійних інструкторів</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <Icon name="lucide:users" size="32" />
+                            </div>
+                            <h3>Спільнота</h3>
+                            <p>Доступ до закритої спільноти однодумців</p>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">
+                                <Icon name="lucide:headphones" size="32" />
+                            </div>
+                            <h3>Підтримка</h3>
+                            <p>Консультації від інструкторів після завершення курсу</p>
+                        </div>
+                    </div>
+                </NuxtLayout>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="course-cta">
+                <NuxtLayout name="container">
+                    <div class="cta-content">
+                        <h2>Готові почати навчання?</h2>
+                        <p>Приєднуйтесь до курсу та отримайте навички, які можуть врятувати життя</p>
+                        <OthersPrimaryButton 
+                            class="cta-button"
+                            @click="openContactModal"
+                        >
+                            ХОЧУ НА ІНТЕНСИВ
+                        </OthersPrimaryButton>
+                    </div>
+                </NuxtLayout>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <Footer />
+        
+        <!-- Contact Modal -->
+        <!-- Modal is handled globally in app.vue through contactsStore -->
+    </div>
+</template>
+
+<script setup lang="ts">
+import type { Course } from '~/types/course.types'
+
+// Default page meta
+definePageMeta({
+    title: 'Курс - NaGrani',
+    description: 'Курс виживання від NaGrani'
+})
+
+const route = useRoute()
+const slug = computed(() => route.params.slug as string)
+
+// State
+const course = ref<Course | null>(null)
+const isLoading = ref(true)
+const error = ref<string | null>(null)
+const contactsStore = useContactsStore()
+
+// Dynamic meta tags that update when course loads
+watch(course, (newCourse) => {
+    if (newCourse) {
+        useHead({
+            title: `${newCourse.title} - NaGrani`,
+            meta: [
+                {
+                    name: 'description',
+                    content: newCourse.short_description
+                },
+                {
+                    property: 'og:title',
+                    content: `${newCourse.title} - NaGrani`
+                },
+                {
+                    property: 'og:description',
+                    content: newCourse.short_description
+                },
+                {
+                    property: 'og:image',
+                    content: getDirectusImageUrl(newCourse.image)
+                }
+            ]
+        })
+    }
+}, { immediate: false })
+
+// Load course data
+const loadCourse = async () => {
+    try {
+        isLoading.value = true
+        error.value = null
+        
+        const coursesStore = useCoursesStore()
+        
+        // If no courses in store, try to fetch them
+        if (coursesStore.courses.length === 0) {
+            try {
+                await coursesStore.fetchCourses()
+            } catch (fetchError) {
+                console.error('Error fetching courses:', fetchError)
+            }
+        }
+        
+        // Check if there was an error fetching courses
+        if (coursesStore.error) {
+            error.value = 'Помилка завантаження курсів'
+            return
+        }
+        
+        // Find course by slug
+        const foundCourse = coursesStore.courses.find(c => c.slug === slug.value)
+        
+        if (foundCourse) {
+            course.value = foundCourse
+        } else {
+            // If course not found and we have no courses, try fetching again
+            if (coursesStore.courses.length === 0) {
+                try {
+                    await coursesStore.fetchCourses()
+                    const retryFoundCourse = coursesStore.courses.find(c => c.slug === slug.value)
+                    if (retryFoundCourse) {
+                        course.value = retryFoundCourse
+                    } else {
+                        error.value = 'Course not found'
+                    }
+                } catch (retryError) {
+                    console.error('Retry error:', retryError)
+                    error.value = 'Course not found'
+                }
+            } else {
+                error.value = 'Course not found'
+            }
+        }
+        
+    } catch (e) {
+        console.error('Error loading course:', e)
+        error.value = 'Error loading course'
+    } finally {
+        isLoading.value = false
+    }
+}
+
+// Methods
+const openContactModal = () => {
+    try {
+        contactsStore.contactPopup = true
+    } catch (e) {
+        console.error('Error opening contact modal:', e)
+    }
+}
+
+const playVideo = () => {
+    // Placeholder for video functionality
+    console.log('Play video functionality')
+}
+
+// Load course on mount
+onMounted(async () => {
+    try {
+        await loadCourse()
+    } catch (e) {
+        console.error('Error in onMounted:', e)
+        error.value = 'Помилка ініціалізації сторінки'
+    }
+})
+
+// Watch for route changes
+watch(() => route.params.slug, async (newSlug) => {
+    if (newSlug && newSlug !== slug.value) {
+        try {
+            await loadCourse()
+        } catch (e) {
+            console.error('Error loading course on route change:', e)
+            error.value = 'Помилка завантаження курсу'
+        }
+    }
+}, { immediate: false })
+</script>
+
+<style scoped lang="scss">
+.course-page {
+    min-height: 100vh;
+    background-color: $mainBlack;
+    color: $white;
+}
+
+// Loading & Error States
+.loading-state,
+.error-state {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-content,
+.error-content {
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #333;
+    border-top: 3px solid $accent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error-icon {
+    color: $accent;
+    margin-bottom: 20px;
+}
+
+.error-content h2 {
+    font-family: "Russo One", sans-serif;
+    margin-bottom: 16px;
+}
+
+.error-content p {
+    color: #a0a0a0;
+    margin-bottom: 24px;
+}
+
+// Hero Section
+.course-hero {
+    padding: 100px 0 80px;
+    
+    &__grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 60px;
+        align-items: center;
+        
+        @media (min-width: 992px) {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    
+    &__breadcrumbs {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 24px;
+        color: #a0a0a0;
+        font-size: 14px;
+        
+        .breadcrumb-link {
+            color: #a0a0a0;
+            text-decoration: none;
+            transition: color 0.3s;
+            
+            &:hover {
+                color: $accent;
+            }
+        }
+        
+        .breadcrumb-current {
+            color: $accent;
+        }
+    }
+    
+    &__title {
+        font-family: "Russo One", sans-serif;
+        font-size: clamp(28px, 5vw, 48px);
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+    
+    &__short-desc {
+        font-size: 18px;
+        color: #a0a0a0;
+        margin-bottom: 32px;
+        line-height: 1.6;
+    }
+    
+    &__meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-bottom: 32px;
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #a0a0a0;
+            
+            svg {
+                color: $accent;
+            }
+        }
+    }
+    
+    &__price {
+        margin-bottom: 32px;
+        
+        .old-price {
+            color: #666;
+            text-decoration: line-through;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+        
+        .current-price {
+            font-family: "Russo One", sans-serif;
+            font-size: 24px;
+            color: $accent;
+        }
+    }
+    
+    &__cta {
+        font-size: 16px;
+        padding: 16px 32px;
+    }
+}
+
+.course-hero__media {
+    .media-container {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        
+        .course-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            
+            &:hover {
+                opacity: 1;
+            }
+            
+            .play-button {
+                background: $accent;
+                border: none;
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                cursor: pointer;
+                transition: transform 0.3s;
+                
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
+        }
+    }
+}
+
+// Description Section
+.course-description {
+    padding: 80px 0;
+    background-color: $secondBlack;
+    
+    &__grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 60px;
+        
+        @media (min-width: 992px) {
+            grid-template-columns: 2fr 1fr;
+        }
+    }
+}
+
+.section-title {
+    font-family: "Russo One", sans-serif;
+    font-size: 32px;
+    margin-bottom: 32px;
+    color: $white;
+}
+
+.description-text {
+    color: #a0a0a0;
+    line-height: 1.8;
+    font-size: 16px;
+    
+    :deep(p) {
+        margin-bottom: 20px;
+        
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    
+    :deep(h3) {
+        color: $white;
+        font-weight: 600;
+        margin: 32px 0 16px;
+    }
+    
+    :deep(ul) {
+        padding-left: 20px;
+        margin-bottom: 20px;
+        
+        li {
+            margin-bottom: 8px;
+        }
+    }
+}
+
+// Sidebar
+.info-card {
+    background-color: $thirdBlack;
+    border-radius: 12px;
+    padding: 32px;
+    border: 1px solid #333;
+    
+    &__title {
+        font-family: "Russo One", sans-serif;
+        font-size: 20px;
+        margin-bottom: 24px;
+        color: $white;
+    }
+}
+
+.info-list {
+    margin-bottom: 32px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    color: #a0a0a0;
+    
+    &:last-child {
+        margin-bottom: 0;
+    }
+    
+    svg {
+        color: $accent;
+        flex-shrink: 0;
+    }
+}
+
+.price-section {
+    border-top: 1px solid #333;
+    padding-top: 24px;
+}
+
+.price-display {
+    margin-bottom: 20px;
+    
+    .old-price {
+        display: block;
+        color: #666;
+        text-decoration: line-through;
+        margin-bottom: 4px;
+        font-size: 14px;
+    }
+    
+    .current-price {
+        font-family: "Russo One", sans-serif;
+        font-size: 28px;
+        color: $accent;
+    }
+}
+
+.sidebar-cta {
+    width: 100%;
+}
+
+// Benefits Section
+.course-benefits {
+    padding: 80px 0;
+    background-color: $mainBlack;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+.benefit-item {
+    text-align: center;
+    
+    .benefit-icon {
+        width: 80px;
+        height: 80px;
+        background-color: $accent-light;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        
+        svg {
+            color: $accent;
+        }
+    }
+    
+    h3 {
+        font-family: "Russo One", sans-serif;
+        font-size: 20px;
+        margin-bottom: 12px;
+        color: $white;
+    }
+    
+    p {
+        color: #a0a0a0;
+        line-height: 1.6;
+    }
+}
+
+// CTA Section
+.course-cta {
+    padding: 80px 0;
+    background-color: $secondBlack;
+}
+
+.cta-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    
+    h2 {
+        font-family: "Russo One", sans-serif;
+        font-size: 32px;
+        margin-bottom: 16px;
+        color: $white;
+    }
+    
+    p {
+        font-size: 18px;
+        color: #a0a0a0;
+        margin-bottom: 32px;
+        line-height: 1.6;
+    }
+}
+
+.cta-button {
+    font-size: 18px;
+    padding: 18px 40px;
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .course-hero {
+        padding: 0;
+        
+        &__grid {
+            gap: 40px;
+        }
+        
+        &__meta {
+            gap: 16px;
+            
+            .meta-item {
+                font-size: 14px;
+            }
+        }
+    }
+    
+    .course-description {
+        padding: 60px 0;
+        
+        &__grid {
+            gap: 40px;
+        }
+    }
+    
+    .section-title {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+    
+    .info-card {
+        padding: 24px;
+    }
+    
+    .course-benefits,
+    .course-cta {
+        padding: 60px 0;
+    }
+    
+    .benefits-grid {
+        gap: 32px;
+    }
+}
+</style>

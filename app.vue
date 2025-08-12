@@ -4,10 +4,21 @@
         <NuxtLayout>
             <NuxtPage/>
         </NuxtLayout>
+        
+        <!-- Global Contact Modal -->
+        <OthersContactModal
+            :is-open="contactsStore.contactPopup"
+            @close="contactsStore.contactPopup = false"
+        />
     </div>
 </template>
 <script setup lang="ts">
 const contactsStore = useContactsStore();
+const coursesStore = useCoursesStore();
 
-await contactsStore.fetchContacts();
+// Load initial data
+await Promise.all([
+    contactsStore.fetchContacts(),
+    coursesStore.fetchCourses()
+]);
 </script>

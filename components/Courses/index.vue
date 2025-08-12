@@ -37,7 +37,7 @@
                         size="40"
                         class="courses__error-icon" />
                     <h3>Не вдалося завантажити курси</h3>
-                    <p>{{ error.message }}</p>
+                    <p>{{ error }}</p>
                     <button
                         class="courses__error-button"
                         @click="refresh()">
@@ -64,49 +64,58 @@
 import { useCoursesStore } from "~/stores/courses";
 const coursesStore = useCoursesStore();
 
-const { courses } = storeToRefs(coursesStore);
+const { courses, isLoading, error } = storeToRefs(coursesStore);
 
-const { data, status, error, refresh } = await useAsyncData("courses", async () => {
+// Use computed for status to match the template expectations
+const status = computed(() => isLoading.value ? 'pending' : 'success');
+
+const refresh = async () => {
     await coursesStore.fetchCourses();
-    return coursesStore.courses;
+};
+
+// Ensure courses are loaded
+onMounted(async () => {
+    if (courses.value.length === 0) {
+        await coursesStore.fetchCourses();
+    }
 });
 
 useSchemaOrg({
     "@context": "https://schema.org",
-        "@type": "ItemList",
-        "itemListElement": courses.value
-            .filter(course => course.status === 'published')
-            .map((course, index) => ({
-                "@type": "ListItem",
-                "position": index + 1,
-                "item": {
-                    "@type": "Course",
-                    "name": course.title,
-                    "description": course.short_description || course.title,
-                    "provider": {
-                        "@type": "Organization",
-                        "name": "NaGrani",
-                        "sameAs": "https://nagrani.com.ua"
-                    },
-                    // Добавляем цену, если она есть
-                    ...(course.price && {
-                        "offers": {
-                            "@type": "Offer",
-                            "price": course.price,
-                            "priceCurrency": "UAH"
-                        }
-                    }),
-                    // Добавляем рейтинг, если он есть
-                    ...(course.rating && {
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": parseFloat(course.rating) || 5,
-                            "ratingCount": parseInt(course.students || "10")
-                        }
-                    })
-                }
-            }))
-})
+    "@type": "ItemList",
+    "itemListElement": computed(() => courses.value
+        .filter(course => course.status === 'published')
+        .map((course, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+                "@type": "Course",
+                "name": course.title,
+                "description": course.short_description || course.title,
+                "provider": {
+                    "@type": "Organization",
+                    "name": "NaGrani",
+                    "sameAs": "https://nagrani.com.ua"
+                },
+                // Добавляем цену, если она есть
+                ...(course.price && {
+                    "offers": {
+                        "@type": "Offer",
+                        "price": course.price,
+                        "priceCurrency": "UAH"
+                    }
+                }),
+                // Добавляем рейтинг, если он есть
+                ...(course.rating && {
+                    "aggregateRating": {
+                        "@type": "AggregateRating",
+                        "ratingValue": parseFloat(course.rating) || 5,
+                        "ratingCount": parseInt(course.students || "10")
+                    }
+                })
+            }
+        })))
+});
 </script>
 
 <style lang="scss" scoped>

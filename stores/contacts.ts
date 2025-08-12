@@ -5,7 +5,8 @@ export const useContactsStore = defineStore("contacts", {
     state: () => ({
         contacts: {} as Contacts,
         error: null as string | null,
-        isLoading: false
+        isLoading: false,
+        contactPopup: false as boolean
     }),
     actions: {
         async fetchContacts() {

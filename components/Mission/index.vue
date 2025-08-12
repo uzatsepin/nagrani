@@ -56,12 +56,14 @@
                         <div class="mission__image-wrapper">
                             <NuxtImg
                                 src="/images/mission.webp"
-                                alt="Mission and purpose"
+                                alt="Місія NaGrani - навчання виживання та безпеки в екстремальних умовах"
                                 class="mission__image"
                                 width="700"
                                 height="500"
                                 format="webp"
-                                quality="80" />
+                                quality="85"
+                                loading="lazy"
+                                placeholder />
                             <div class="mission__image-overlay"></div>
                         </div>
 

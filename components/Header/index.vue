@@ -4,8 +4,12 @@
             <NuxtLink to="/" class="header__logo">
                 <NuxtImg
                     src="/images/logo.svg"
-                    alt="logo"
-                    width="125" />
+                    alt="NaGrani - школа виживання та безпеки, логотип"
+                    width="125"
+                    height="62"
+                    loading="eager"
+                    :preload="true"
+                    fetchpriority="high" />
             </NuxtLink>
 
             <button

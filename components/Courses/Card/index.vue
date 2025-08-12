@@ -8,12 +8,15 @@
         @mouseleave="hoveredCard = null">
         <div class="course-card__image-container">
             <NuxtImg
-                :src="getDirectusImageUrl(course.image)"
-                :alt="course.title"
+                :src="getDirectusImageUrl(course.image, { width: 400, height: 250, quality: 85, fit: 'cover' })"
+                :alt="`Курс ${course.title} - навчання виживання та безпеки в NaGrani`"
                 width="400"
                 height="250"
                 format="webp"
-                quality="80"
+                quality="85"
+                loading="lazy"
+                placeholder
+                :preload="false"
                 class="course-card__image" />
         </div>
 
@@ -165,7 +168,7 @@ const calculateDiscount = computed(() => {
     &__discount {
         background-color: rgba($accent, 0.2);
         color: $accent;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 14px;
         padding: 4px 10px;
         border-radius: 4px;
@@ -176,16 +179,6 @@ const calculateDiscount = computed(() => {
         span {
             display: inline-flex;
             align-items: center;
-        }
-        
-        &::before {
-            content: '';
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background-color: $accent;
-            margin-right: 4px;
-            border-radius: 50%;
         }
     }
 
@@ -212,6 +205,7 @@ const calculateDiscount = computed(() => {
         height: 130px;
         display: -webkit-box;
         -webkit-line-clamp: 3;
+        line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;

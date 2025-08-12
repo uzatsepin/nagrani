@@ -21,12 +21,14 @@
                         ref="imageWrapper">
                         <NuxtImg
                             src="/images/about-instructors.webp"
-                            alt="Тренування команди з виживання"
+                            alt="Професійні інструктори NaGrani - тренування команди з виживання та тактичної підготовки"
                             class="about__image"
                             width="700"
                             height="500"
                             format="webp"
-                            quality="80" />
+                            quality="85"
+                            loading="lazy"
+                            placeholder />
                         <div class="about__image-overlay"></div>
                     </div>
 

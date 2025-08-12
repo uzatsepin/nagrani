@@ -23,4 +23,5 @@ export interface Course {
     price:             number;
     old_price:         number;
     slug:              string;
+    presentation?:     string;
 }

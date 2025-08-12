@@ -2,7 +2,7 @@
     <div v-if="isOpen" class="modal-overlay" @click="closeModal">
         <div class="modal" @click.stop>
             <div class="modal__header">
-                <h3 class="modal__title">ЗАЛИШИЛИСЬ ПИТАННЯ?</h3>
+                <h3 class="modal__title">Залишити заявку</h3>
                 <button class="modal__close" @click="closeModal">
                     <Icon name="lucide:x" size="24" />
                 </button>
@@ -21,6 +21,7 @@
                             v-model="form.name"
                             type="text"
                             class="form-input"
+                            :class="{ 'form-input--error': hasAttemptedSubmit && errors.name }"
                             placeholder="Введіть ваше ім'я"
                             required
                         />
@@ -35,6 +36,7 @@
                             @input="formatPhone"
                             type="tel"
                             class="form-input"
+                            :class="{ 'form-input--error': hasAttemptedSubmit && errors.phone }"
                             placeholder="+38 (0XX) XXX-XX-XX"
                             maxlength="19"
                             required
@@ -97,6 +99,7 @@ const form = ref<FormData>({
 
 const errors = ref<FormErrors>({})
 const isSubmitting = ref(false)
+const hasAttemptedSubmit = ref(false)
 
 const closeModal = () => {
     emit('close')
@@ -110,6 +113,7 @@ const resetForm = () => {
         question: ''
     }
     errors.value = {}
+    hasAttemptedSubmit.value = false
 }
 
 const formatPhone = (event: Event) => {
@@ -169,6 +173,8 @@ const validateForm = (): boolean => {
 }
 
 const submitForm = async () => {
+    hasAttemptedSubmit.value = true
+    
     if (!validateForm()) {
         return
     }
@@ -240,7 +246,8 @@ watch(() => props.isOpen, (isOpen) => {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(3px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -339,7 +346,7 @@ watch(() => props.isOpen, (isOpen) => {
         border-color: $accent;
     }
     
-    &:invalid {
+    &--error {
         border-color: #dc3545;
     }
 }

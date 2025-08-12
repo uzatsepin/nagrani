@@ -64,7 +64,14 @@ export default defineNuxtConfig({
                 { rel: "shortcut icon", href: "/favicon/favicon.ico" },
                 { rel: "apple-touch-icon", sizes: "180x180", href: "/favicon/apple-touch-icon.png" },
                 { rel: "manifest", href: "/favicon/site.webmanifest" },
-                { rel: "canonical", href: "https://nagrani.life" }
+                { rel: "canonical", href: "https://nagrani.life" },
+                { rel: "preconnect", href: "https://fonts.googleapis.com" },
+                { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
+                // Preload critical images
+                { rel: "preload", href: "/images/hero-image.webp", as: "image", type: "image/webp" },
+                { rel: "preload", href: "/images/logo.svg", as: "image", type: "image/svg+xml" },
+                // DNS prefetch for external services
+                { rel: "dns-prefetch", href: "https://stats.razserv.cloud" }
             ],
             script: [
                 {
@@ -76,5 +83,91 @@ export default defineNuxtConfig({
         }
     },
 
-    modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "nuxt-aos", "@pinia/nuxt", "@nuxtjs/seo", "@vueuse/nuxt"]
+    modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "nuxt-aos", "@pinia/nuxt", "@nuxtjs/seo", "@vueuse/nuxt"],
+
+    // Image optimization
+    image: {
+        quality: 80,
+        format: ['webp', 'png', 'jpg'],
+        densities: [1, 2],
+        screens: {
+            xs: 320,
+            sm: 640,
+            md: 768,
+            lg: 1024,
+            xl: 1280,
+            xxl: 1536,
+        },
+        presets: {
+            avatar: {
+                modifiers: {
+                    format: 'webp',
+                    width: 80,
+                    height: 80,
+                    quality: 80
+                }
+            },
+            course: {
+                modifiers: {
+                    format: 'webp',
+                    quality: 85,
+                    fit: 'cover'
+                }
+            }
+        },
+        providers: {
+            directus: {
+                provider: 'ipx',
+                options: {
+                    baseURL: process.env.NUXT_DIRECTUS_API_BASE || 'http://localhost:8055',
+                    modifiers: {
+                        srcset: false
+                    }
+                }
+            }
+        }
+    },
+
+    // Performance optimizations
+    experimental: {
+        payloadExtraction: false,
+        renderJsonPayloads: true
+    },
+
+    nitro: {
+        minify: true,
+        compressPublicAssets: true,
+        prerender: {
+            routes: ['/']
+        },
+        experimental: {
+            wasm: true,
+        },
+        routeRules: {
+            "/": {
+                prerender: true,
+                headers: { "cache-control": "s-maxage=31536000" }
+            },
+            '/images/**': {
+                headers: {
+                    'Cache-Control': 'public, max-age=31536000, immutable',
+                },
+            },
+            '/icons/**': {
+                headers: {
+                    'Cache-Control': 'public, max-age=31536000, immutable',
+                }
+            },
+            '/_nuxt/**': {
+                headers: {
+                    'Cache-Control': 'public, max-age=31536000, immutable',
+                }
+            },
+            "/_ipx/**": {
+                headers: {
+                    'Cache-Control': 'public, max-age=31536000, immutable',
+                }
+            }
+        }
+    }
 });

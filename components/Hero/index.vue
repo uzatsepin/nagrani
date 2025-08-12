@@ -85,12 +85,14 @@
                     <div class="hero__image-wrapper">
                         <NuxtImg
                             src="/images/hero-image.webp"
-                            width="708"
-                            height="650"
+                            width="718"
+                            height="659"
                             format="webp"
+                            quality="90"
                             class="hero__image"
-                            alt="Survival training image"
+                            alt="Навчання виживання та тактичної підготовки в школі NaGrani - професійні інструктори та практичні навички"
                             loading="eager"
+                            :preload="true"
                             ref="heroImage" />
 
                         <div class="hero__floating-element hero__floating-element--1">

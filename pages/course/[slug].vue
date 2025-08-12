@@ -86,10 +86,11 @@
                                     width="600"
                                     height="400"
                                 />
-                                <!-- Placeholder for video - можно заменить на видео если есть -->
-                                <div class="video-overlay">
-                                    <button class="play-button" @click="playVideo">
-                                        <Icon name="lucide:play" size="24" />
+                                <!-- PDF Presentation Overlay -->
+                                <div v-if="course.presentation" class="presentation-overlay">
+                                    <button class="presentation-button" @click="openPresentation">
+                                        <Icon name="lucide:file-text" size="24" />
+                                        <span>Переглянути презентацію</span>
                                     </button>
                                 </div>
                             </div>
@@ -223,6 +224,7 @@ definePageMeta({
 
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
+const { setCoursePageSEO } = useSEO()
 
 // State
 const course = ref<Course | null>(null)
@@ -230,32 +232,12 @@ const isLoading = ref(true)
 const error = ref<string | null>(null)
 const contactsStore = useContactsStore()
 
-// Dynamic meta tags that update when course loads
+// Update SEO when course loads
 watch(course, (newCourse) => {
     if (newCourse) {
-        useHead({
-            title: `${newCourse.title} - NaGrani`,
-            meta: [
-                {
-                    name: 'description',
-                    content: newCourse.short_description
-                },
-                {
-                    property: 'og:title',
-                    content: `${newCourse.title} - NaGrani`
-                },
-                {
-                    property: 'og:description',
-                    content: newCourse.short_description
-                },
-                {
-                    property: 'og:image',
-                    content: getDirectusImageUrl(newCourse.image)
-                }
-            ]
-        })
+        setCoursePageSEO(newCourse)
     }
-}, { immediate: false })
+}, { immediate: true })
 
 // Load course data
 const loadCourse = async () => {
@@ -325,6 +307,13 @@ const openContactModal = () => {
 const playVideo = () => {
     // Placeholder for video functionality
     console.log('Play video functionality')
+}
+
+const openPresentation = () => {
+    if (course.value?.presentation) {
+        const presentationUrl = getDirectusImageUrl(course.value.presentation)
+        window.open(presentationUrl, '_blank')
+    }
 }
 
 // Load course on mount
@@ -506,7 +495,8 @@ watch(() => route.params.slug, async (newSlug) => {
             object-fit: cover;
         }
         
-        .video-overlay {
+        .video-overlay,
+        .presentation-overlay {
             position: absolute;
             top: 0;
             left: 0;
@@ -523,21 +513,38 @@ watch(() => route.params.slug, async (newSlug) => {
                 opacity: 1;
             }
             
-            .play-button {
+            .play-button,
+            .presentation-button {
                 background: $accent;
                 border: none;
-                border-radius: 50%;
-                width: 60px;
-                height: 60px;
+                border-radius: 12px;
+                padding: 16px 24px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                gap: 8px;
                 color: white;
                 cursor: pointer;
                 transition: transform 0.3s;
+                font-weight: 600;
                 
                 &:hover {
-                    transform: scale(1.1);
+                    transform: scale(1.05);
+                }
+                
+                span {
+                    font-size: 14px;
+                }
+            }
+            
+            .play-button {
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                padding: 0;
+                
+                span {
+                    display: none;
                 }
             }
         }
@@ -568,7 +575,7 @@ watch(() => route.params.slug, async (newSlug) => {
 }
 
 .description-text {
-    color: #a0a0a0;
+    color: #FFF;
     line-height: 1.8;
     font-size: 16px;
     
@@ -580,6 +587,13 @@ watch(() => route.params.slug, async (newSlug) => {
         }
     }
     
+    :deep(h2) {
+        color: $white;
+        font-weight: 600;
+        margin: 32px 0 16px;
+        font-size: 24px;
+    }
+
     :deep(h3) {
         color: $white;
         font-weight: 600;
@@ -592,7 +606,14 @@ watch(() => route.params.slug, async (newSlug) => {
         
         li {
             margin-bottom: 8px;
+            list-style: disc;
         }
+    }
+
+    :deep(blockquote) {
+        padding: 12px 16px;
+        background-color: darken($secondBlack, 5%);
+        border-left: 4px solid $accent;
     }
 }
 

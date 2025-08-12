@@ -6,7 +6,12 @@
                     <a
                         href="/"
                         class="footer__logo">
-                        <NuxtImg src="/images/logo.svg" alt="NaGrani" width="125" height="62" />
+                        <NuxtImg 
+                            src="/images/logo.svg" 
+                            alt="NaGrani - школа виживання та безпеки" 
+                            width="125" 
+                            height="62"
+                            loading="lazy" />
                     </a>
                     <p class="footer__desc">Пройдена небезпека – безпечна. Чим більше небезпек позаду, тим безпечніше життя попереду.</p>
                     <div class="footer__socials">

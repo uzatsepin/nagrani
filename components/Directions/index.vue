@@ -42,12 +42,14 @@
                                     <div class="tab-panel__image-wrapper">
                                         <NuxtImg
                                             :src="activeDirection.image"
-                                            :alt="activeDirection.title"
+                                            :alt="`Напрямок навчання: ${activeDirection.title} - курси виживання NaGrani`"
                                             class="tab-panel__image"
                                             width="800"
                                             height="500"
                                             format="webp"
-                                            quality="80" />
+                                            quality="85"
+                                            loading="lazy"
+                                            placeholder />
                                         <div class="tab-panel__image-overlay"></div>
                                         <div class="tab-panel__image-content">
                                             <h3 class="tab-panel__title">{{ activeDirection.title }}</h3>

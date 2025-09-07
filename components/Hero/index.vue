@@ -30,19 +30,22 @@
                         <div class="hero__feature">
                             <Icon
                                 name="lucide:check-circle"
-                                class="hero__feature-icon" />
+                                class="hero__feature-icon" 
+                                size="20"/>
                             <span>Практичні навички</span>
                         </div>
                         <div class="hero__feature">
                             <Icon
                                 name="lucide:shield"
-                                class="hero__feature-icon" />
+                                class="hero__feature-icon"
+                                size="20" />
                             <span>Готовність до будь-яких ситуацій</span>
                         </div>
                         <div class="hero__feature">
                             <Icon
                                 name="lucide:award"
-                                class="hero__feature-icon" />
+                                class="hero__feature-icon"
+                                size="20" />
                             <span>Досвідчені інструктори</span>
                         </div>
                     </div>

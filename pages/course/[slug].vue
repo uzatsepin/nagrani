@@ -4,7 +4,7 @@
         <Header />
         
         <!-- Loading State -->
-        <div v-if="isLoading" class="loading-state">
+        <div v-if="pending" class="loading-state">
             <NuxtLayout name="container">
                 <div class="loading-content">
                     <div class="loading-spinner"></div>
@@ -84,7 +84,7 @@
                                     :alt="course.title"
                                     class="course-image"
                                     width="600"
-                                    height="400"
+                                    height="590"
                                 />
                                 <!-- PDF Presentation Overlay -->
                                 <div v-if="course.presentation" class="presentation-overlay">
@@ -212,84 +212,97 @@
 <script setup lang="ts">
 import type { Course } from '~/types/course.types'
 
-// Default page meta
-definePageMeta({
-    title: 'Курс - NaGrani',
-    description: 'Курс виживання від NaGrani'
-})
-
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 const { setCoursePageSEO } = useSEO()
-
-// State
-const course = ref<Course | null>(null)
-const isLoading = ref(true)
-const error = ref<string | null>(null)
 const contactsStore = useContactsStore()
 
-// Update SEO when course loads
+// Загружаем курс на сервере для правильного SEO
+const { data: course, error, pending } = await useLazyAsyncData(
+    `course-${slug.value}`,
+    async () => {
+        const coursesStore = useCoursesStore()
+        
+        // Пытаемся найти курс в store
+        let foundCourse = coursesStore.courses.find(c => c.slug === slug.value)
+        
+        // Если курс не найден, загружаем все курсы
+        if (!foundCourse) {
+            try {
+                await coursesStore.fetchCourses()
+                foundCourse = coursesStore.courses.find(c => c.slug === slug.value)
+            } catch (fetchError) {
+                console.error('Error fetching courses:', fetchError)
+                throw createError({
+                    statusCode: 404,
+                    statusMessage: 'Course not found'
+                })
+            }
+        }
+        
+        if (!foundCourse) {
+            throw createError({
+                statusCode: 404,
+                statusMessage: 'Course not found'
+            })
+        }
+        
+        return foundCourse
+    },
+    {
+        transform: (data: Course) => data,
+        default: () => null
+    }
+)
+
+// Устанавливаем SEO когда курс загружен
 watch(course, (newCourse) => {
     if (newCourse) {
         setCoursePageSEO(newCourse)
     }
 }, { immediate: true })
 
-// Load course data
-const loadCourse = async () => {
-    try {
-        isLoading.value = true
-        error.value = null
-        
-        const coursesStore = useCoursesStore()
-        
-        // If no courses in store, try to fetch them
-        if (coursesStore.courses.length === 0) {
-            try {
-                await coursesStore.fetchCourses()
-            } catch (fetchError) {
-                console.error('Error fetching courses:', fetchError)
-            }
-        }
-        
-        // Check if there was an error fetching courses
-        if (coursesStore.error) {
-            error.value = 'Помилка завантаження курсів'
-            return
-        }
-        
-        // Find course by slug
-        const foundCourse = coursesStore.courses.find(c => c.slug === slug.value)
-        
-        if (foundCourse) {
-            course.value = foundCourse
-        } else {
-            // If course not found and we have no courses, try fetching again
-            if (coursesStore.courses.length === 0) {
-                try {
-                    await coursesStore.fetchCourses()
-                    const retryFoundCourse = coursesStore.courses.find(c => c.slug === slug.value)
-                    if (retryFoundCourse) {
-                        course.value = retryFoundCourse
-                    } else {
-                        error.value = 'Course not found'
-                    }
-                } catch (retryError) {
-                    console.error('Retry error:', retryError)
-                    error.value = 'Course not found'
-                }
-            } else {
-                error.value = 'Course not found'
-            }
-        }
-        
-    } catch (e) {
-        console.error('Error loading course:', e)
-        error.value = 'Error loading course'
-    } finally {
-        isLoading.value = false
+// Устанавливаем базовые мета-теги для случая загрузки
+const ogImage = computed(() => {
+    if (course.value) {
+        return getDirectusImageUrl(course.value.image, { 
+            width: 1200, 
+            height: 630, 
+            quality: 85, 
+            fit: 'cover' 
+        })
     }
-}
+    return '/images/og-image.jpg'
+})
+
+useHead(() => {
+    if (course.value) {
+        return {
+            title: `${course.value.title} - NaGrani`,
+            meta: [
+                { name: 'description', content: course.value.short_description },
+                { property: 'og:title', content: `${course.value.title} - NaGrani` },
+                { property: 'og:description', content: course.value.short_description },
+                { property: 'og:image', content: ogImage.value },
+                { property: 'og:image:width', content: '1200' },
+                { property: 'og:image:height', content: '630' },
+                { property: 'og:type', content: 'article' },
+                { property: 'og:url', content: `https://nagrani.life/course/${course.value.slug}` },
+                { name: 'twitter:card', content: 'summary_large_image' },
+                { name: 'twitter:title', content: `${course.value.title} - NaGrani` },
+                { name: 'twitter:description', content: course.value.short_description },
+                { name: 'twitter:image', content: ogImage.value },
+            ]
+        }
+    }
+    
+    return {
+        title: 'Курс - NaGrani',
+        meta: [
+            { name: 'description', content: 'Курс виживання від NaGrani' }
+        ]
+    }
+})
 
 // Methods
 const openContactModal = () => {
@@ -311,28 +324,6 @@ const openPresentation = () => {
         window.open(presentationUrl, '_blank')
     }
 }
-
-// Load course on mount
-onMounted(async () => {
-    try {
-        await loadCourse()
-    } catch (e) {
-        console.error('Error in onMounted:', e)
-        error.value = 'Помилка ініціалізації сторінки'
-    }
-})
-
-// Watch for route changes
-watch(() => route.params.slug, async (newSlug) => {
-    if (newSlug && newSlug !== slug.value) {
-        try {
-            await loadCourse()
-        } catch (e) {
-            console.error('Error loading course on route change:', e)
-            error.value = 'Помилка завантаження курсу'
-        }
-    }
-}, { immediate: false })
 </script>
 
 <style scoped lang="scss">
@@ -487,8 +478,12 @@ watch(() => route.params.slug, async (newSlug) => {
         
         .course-image {
             width: 100%;
-            height: 400px;
+            height: 590px;
             object-fit: cover;
+
+            @media screen and (max-width: 767px) {
+                height: 390px;
+            }
         }
         
         .video-overlay,

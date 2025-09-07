@@ -33,12 +33,12 @@
                         <input
                             id="phone"
                             v-model="form.phone"
-                            @input="formatPhone"
+                            v-maska
+                            data-maska="+38 (0##) ###-##-##"
                             type="tel"
                             class="form-input"
                             :class="{ 'form-input--error': hasAttemptedSubmit && errors.phone }"
                             placeholder="+38 (0XX) XXX-XX-XX"
-                            maxlength="19"
                             required
                         />
                         <span v-if="errors.phone" class="form-error">{{ errors.phone }}</span>
@@ -93,7 +93,7 @@ const emit = defineEmits<{
 
 const form = ref<FormData>({
     name: '',
-    phone: '+38',
+    phone: '',
     question: ''
 })
 
@@ -109,51 +109,11 @@ const closeModal = () => {
 const resetForm = () => {
     form.value = {
         name: '',
-        phone: '+38',
+        phone: '',
         question: ''
     }
     errors.value = {}
     hasAttemptedSubmit.value = false
-}
-
-const formatPhone = (event: Event) => {
-    const input = event.target as HTMLInputElement
-    let value = input.value.replace(/\D/g, '') // Удаляем все нецифровые символы
-    
-    // Если номер начинается с 380, оставляем как есть
-    // Если начинается с 38, добавляем 0
-    // Если начинается с других цифр, добавляем 380
-    if (value.startsWith('380')) {
-        value = value.substring(3)
-    } else if (value.startsWith('38')) {
-        value = value.substring(2)
-    } else if (value.startsWith('0')) {
-        value = value.substring(1)
-    }
-    
-    // Ограничиваем длину
-    value = value.substring(0, 9)
-    
-    // Форматируем
-    let formatted = '+38'
-    if (value.length > 0) {
-        formatted += ' (0'
-        if (value.length > 0) {
-            formatted += value.substring(0, 2)
-        }
-        formatted += ')'
-        if (value.length > 2) {
-            formatted += ' ' + value.substring(2, 5)
-        }
-        if (value.length > 5) {
-            formatted += '-' + value.substring(5, 7)
-        }
-        if (value.length > 7) {
-            formatted += '-' + value.substring(7, 9)
-        }
-    }
-    
-    form.value.phone = formatted
 }
 
 const validateForm = (): boolean => {
@@ -165,8 +125,11 @@ const validateForm = (): boolean => {
     
     if (!form.value.phone.trim()) {
         errors.value.phone = "Телефон є обов'язковим полем"
-    } else if (form.value.phone.length < 19) {
-        errors.value.phone = "Невірний формат телефону"
+    } else {
+        // Проверяем, что номер полностью заполнен (19 символов с маской)
+        if (form.value.phone.length < 19) {
+            errors.value.phone = "Невірний формат телефону"
+        }
     }
     
     return Object.keys(errors.value).length === 0

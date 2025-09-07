@@ -90,7 +90,7 @@ export const useSEO = () => {
     }
 
     /**
-     * Generate optimized image URL for social sharing
+     * Generate optimized image URL for social sharing (SSR safe)
      */
     const getOptimizedImageUrl = (imageId: string, options: {
         width?: number
@@ -98,15 +98,41 @@ export const useSEO = () => {
         quality?: number
     } = {}) => {
         const { width = 1200, height = 630, quality = 85 } = options
-        return getDirectusImageUrl(imageId, { width, height, quality, fit: 'cover' })
+        
+        // Проверяем, можем ли мы использовать useRuntimeConfig
+        let directusUrl: string
+        try {
+            const config = useRuntimeConfig()
+            directusUrl = config.public.directusUrl || 'https://nagrani.life'
+        } catch {
+            // Fallback для SSR
+            directusUrl = process.env.NUXT_DIRECTUS_API_BASE || 'https://nagrani.life'
+        }
+        
+        let url = `${directusUrl}/assets/${imageId}`
+        
+        const params = new URLSearchParams()
+        if (width) params.append('width', width.toString())
+        if (height) params.append('height', height.toString())
+        params.append('fit', 'cover')
+        if (quality) params.append('quality', quality.toString())
+        
+        const queryString = params.toString()
+        if (queryString) {
+            url += `?${queryString}`
+        }
+        
+        return url
     }
 
     /**
      * Set course-specific SEO
      */
     const setCoursePageSEO = (course: any) => {
-        const title = `${course.title}`
-        const description = course.short_description
+        if (!course) return
+        
+        const title = `${course.title} - NaGrani`
+        const description = course.short_description || course.description?.substring(0, 160) || 'Курс виживання від NaGrani'
         const image = getOptimizedImageUrl(course.image)
         const url = `https://nagrani.life/course/${course.slug}`
 
@@ -116,8 +142,8 @@ export const useSEO = () => {
             image,
             url,
             type: 'article',
-            publishedTime: new Date(course.date_created).toISOString(),
-            modifiedTime: new Date(course.date_updated).toISOString()
+            publishedTime: course.date_created ? new Date(course.date_created).toISOString() : undefined,
+            modifiedTime: course.date_updated ? new Date(course.date_updated).toISOString() : undefined
         })
 
         // Add course-specific structured data
@@ -125,7 +151,7 @@ export const useSEO = () => {
             type: 'Course',
             data: {
                 name: course.title,
-                description: course.short_description,
+                description: description,
                 provider: {
                     "@type": "Organization",
                     "name": "NaGrani",
@@ -134,21 +160,21 @@ export const useSEO = () => {
                 image: image,
                 offers: {
                     "@type": "Offer",
-                    "price": course.price,
+                    "price": course.price?.toString() || "0",
                     "priceCurrency": "UAH",
                     "availability": "https://schema.org/InStock",
                     "url": url
                 },
                 aggregateRating: course.rating ? {
                     "@type": "AggregateRating",
-                    "ratingValue": course.rating,
-                    "ratingCount": course.students || "1"
+                    "ratingValue": course.rating?.toString(),
+                    "ratingCount": course.students?.toString() || "1"
                 } : undefined,
                 timeRequired: course.duration,
                 educationalLevel: "Beginner",
                 inLanguage: "uk",
-                dateCreated: new Date(course.date_created).toISOString(),
-                dateModified: new Date(course.date_updated).toISOString()
+                dateCreated: course.date_created ? new Date(course.date_created).toISOString() : undefined,
+                dateModified: course.date_updated ? new Date(course.date_updated).toISOString() : undefined
             }
         })
     }

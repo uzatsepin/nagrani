@@ -36,7 +36,7 @@ export function getDirectusImageUrlUniversal(imageId: string, options: {
     quality?: number;
 } = {}): string {
     // Если мы на клиенте, используем обычную функцию
-    if (process.client) {
+    if (import.meta.client) {
         try {
             // Импортируем динамически, чтобы избежать проблем SSR
             const { getDirectusImageUrl } = require('~/utils/directusImg')

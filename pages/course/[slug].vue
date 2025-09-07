@@ -314,14 +314,9 @@ const openContactModal = () => {
     }
 }
 
-const playVideo = () => {
-    // Placeholder for video functionality
-    console.log('Play video functionality')
-}
-
 const openPresentation = () => {
     if (course.value?.presentation) {
-        const presentationUrl = getDirectusImageUrlUniversal(course.value.presentation)
+        const presentationUrl = `https://admin.nagrani.life/assets/${course.value.presentation}`
         window.open(presentationUrl, '_blank')
     }
 }

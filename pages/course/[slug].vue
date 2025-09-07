@@ -211,6 +211,7 @@
 
 <script setup lang="ts">
 import type { Course } from '~/types/course.types'
+import { getDirectusImageUrlUniversal } from '~/utils/directusImgSSR'
 
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
@@ -265,7 +266,7 @@ watch(course, (newCourse) => {
 // Устанавливаем базовые мета-теги для случая загрузки
 const ogImage = computed(() => {
     if (course.value) {
-        return getDirectusImageUrl(course.value.image, { 
+        return getDirectusImageUrlUniversal(course.value.image, { 
             width: 1200, 
             height: 630, 
             quality: 85, 
@@ -320,7 +321,7 @@ const playVideo = () => {
 
 const openPresentation = () => {
     if (course.value?.presentation) {
-        const presentationUrl = getDirectusImageUrl(course.value.presentation)
+        const presentationUrl = getDirectusImageUrlUniversal(course.value.presentation)
         window.open(presentationUrl, '_blank')
     }
 }

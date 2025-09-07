@@ -99,16 +99,8 @@ export const useSEO = () => {
     } = {}) => {
         const { width = 1200, height = 630, quality = 85 } = options
         
-        // Проверяем, можем ли мы использовать useRuntimeConfig
-        let directusUrl: string
-        try {
-            const config = useRuntimeConfig()
-            directusUrl = config.public.directusUrl || 'https://nagrani.life'
-        } catch {
-            // Fallback для SSR
-            directusUrl = process.env.NUXT_DIRECTUS_API_BASE || 'https://nagrani.life'
-        }
-        
+        // Используем переменную окружения напрямую для SSR
+        const directusUrl = process.env.NUXT_DIRECTUS_API_BASE || 'https://nagrani.life'
         let url = `${directusUrl}/assets/${imageId}`
         
         const params = new URLSearchParams()

@@ -108,31 +108,19 @@
                                 >Політика Cookies</NuxtLink
                             >
                         </li>
+                        <li>
+                            <NuxtLink
+                                to="/rules"
+                                class="footer__link"
+                                >Правила і умови</NuxtLink
+                            >
+                        </li>
                     </ul>
                 </div>
 
                 <div class="footer__column">
-                    <h3 class="footer__heading">КОНТАКТИ</h3>
+                    <h3 class="footer__heading">КОНТАКТИ І РЕКВІЗИТИ</h3>
                     <ul class="footer__contact-list">
-                        <!-- <li class="footer__contact-item">
-                            <Icon
-                                name="lucide:map-pin"
-                                size="18"
-                                class="footer__contact-icon" />
-                            <span>вул. Виживання, 42, Київ, 01001, Україна</span>
-                        </li> -->
-                        <!-- <li class="footer__contact-item">
-                            <Icon
-                                name="lucide:phone"
-                                size="18"
-                                class="footer__contact-icon" />
-                            <a
-                                :href="`tel:${contacts.phone}`"
-                                v-if="contacts.phone"
-                                class="footer__link"
-                                >{{ contacts.phone }}</a
-                            >
-                        </li> -->
                         <li class="footer__contact-item">
                             <Icon
                                 name="lucide:mail"
@@ -146,6 +134,32 @@
                             >
                         </li>
                     </ul>
+
+                    <div class="footer__legal-info">
+                        <p class="footer__legal-line">
+                            <strong>ФОП Олійник Віталій Володимирович</strong>
+                        </p>
+                        <p class="footer__legal-line">
+                            <span class="footer__legal-label">ІПН:</span> 3350809898
+                        </p>
+                        <p class="footer__legal-line">
+                            <span class="footer__legal-label">ЄДРПОУ:</span> 3350809898
+                        </p>
+                        <p class="footer__legal-line">
+                            <span class="footer__legal-label">Адреса:</span> м. Одеса, Україна
+                        </p>
+                        <p class="footer__legal-line">
+                            <span class="footer__legal-label">IBAN:</span> 
+                            <span class="footer__iban">UA663220010000026208357664297</span>
+                        </p>
+                        <p class="footer__legal-line">
+                            <span class="footer__legal-label">Банк:</span> АТ "УНІВЕРСАЛ БАНК"
+                        </p>
+                        <p class="footer__legal-line">
+                            <span class="footer__legal-label">Email:</span> 
+                            <a href="mailto:voin91@ukr.net" class="footer__link">voin91@ukr.net</a>
+                        </p>
+                    </div>
 
                     <OthersPrimaryButton @click="contactsStore.contactPopup = true"> ЗАЛИШИЛИСЬ ПИТАННЯ? </OthersPrimaryButton>
                 </div>
@@ -364,6 +378,41 @@ const currentYear = computed(() => new Date().getFullYear());
         .primary-button {
             margin-top: 24px;
         }
+    }
+
+    &__legal-info {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid #1a1a1a;
+    }
+
+    &__legal-line {
+        color: #a0a0a0;
+        font-size: 14px;
+        line-height: 1.4;
+        margin: 0;
+        
+        strong {
+            color: $white;
+            font-weight: 600;
+        }
+    }
+
+    &__legal-label {
+        color: #777;
+        font-weight: 500;
+        min-width: 60px;
+        display: inline-block;
+    }
+
+    &__iban {
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        word-break: break-all;
+        color: $accent;
     }
 }
 </style>

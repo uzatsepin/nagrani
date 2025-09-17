@@ -4,7 +4,7 @@
         <Header />
         
         <!-- Loading State -->
-        <div v-if="pending" class="loading-state">
+        <div v-if="status === 'pending'" class="loading-state">
             <NuxtLayout name="container">
                 <div class="loading-content">
                     <div class="loading-spinner"></div>
@@ -161,10 +161,10 @@
                         </div>
                         <div class="benefit-item">
                             <div class="benefit-icon">
-                                <Icon name="lucide:shield-check" size="32" />
+                                <Icon name="lucide:book-marked" size="32" />
                             </div>
-                            <h3>Сертифікат</h3>
-                            <p>Документ про проходження курсу від професійних інструкторів</p>
+                            <h3>КОРИСНІ МАТЕРІАЛИ</h3>
+                            <p>Методичка з описом алгоритму дій. Опис медичних засобів для зупинки масивних кровотеч які є сертифіковані та рекомендовані. Різні корисні посилання.</p>
                         </div>
                         <div class="benefit-item">
                             <div class="benefit-icon">
@@ -219,7 +219,7 @@ const { setCoursePageSEO } = useSEO()
 const contactsStore = useContactsStore()
 
 // Загружаем курс на сервере для правильного SEO
-const { data: course, error, pending } = await useLazyAsyncData(
+const { data: course, error, status } = await useLazyAsyncData(
     `course-${slug.value}`,
     async () => {
         const coursesStore = useCoursesStore()

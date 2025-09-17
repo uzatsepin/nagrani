@@ -14,11 +14,4 @@
 </template>
 <script setup lang="ts">
 const contactsStore = useContactsStore();
-const coursesStore = useCoursesStore();
-
-// Load initial data
-await Promise.all([
-    contactsStore.fetchContacts(),
-    coursesStore.fetchCourses()
-]);
 </script>

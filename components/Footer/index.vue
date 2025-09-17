@@ -6,10 +6,10 @@
                     <a
                         href="/"
                         class="footer__logo">
-                        <NuxtImg 
-                            src="/images/logo.svg" 
-                            alt="NaGrani - школа виживання та безпеки" 
-                            width="125" 
+                        <NuxtImg
+                            src="/images/logo.svg"
+                            alt="NaGrani - школа виживання та безпеки"
+                            width="125"
                             height="62"
                             loading="lazy" />
                     </a>
@@ -43,7 +43,8 @@
                             <a
                                 href="/"
                                 class="footer__link"
-                                >Головна</a>
+                                >Головна</a
+                            >
                         </li>
                         <li>
                             <a
@@ -76,46 +77,39 @@
                     </ul>
                 </div>
 
-                <!-- <div class="footer__column">
-                    <h3 class="footer__heading">КОРИСНІ ПОСИЛАННЯ</h3>
+                <div class="footer__column">
+                    <h3 class="footer__heading">ЮРИДИЧНІ ПОСИЛАННЯ</h3>
                     <ul class="footer__list">
                         <li>
-                            <a
-                                href="#"
+                            <NuxtLink
+                                to="/publichna-oferta"
                                 class="footer__link"
-                                >Блог</a
+                                >Публічна оферта</NuxtLink
                             >
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <NuxtLink
+                                to="/politika-konfidentsiynosti"
                                 class="footer__link"
-                                >Календар заходів</a
+                                >Політика конфіденційності</NuxtLink
                             >
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <NuxtLink
+                                to="/politika-povernennya"
                                 class="footer__link"
-                                >Політика конфіденційності</a
+                                >Політика повернення</NuxtLink
                             >
                         </li>
                         <li>
-                            <a
-                                href="#"
+                            <NuxtLink
+                                to="/privacy-cookies"
                                 class="footer__link"
-                                >Умови використання</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                href="#"
-                                class="footer__link"
-                                >FAQ</a
+                                >Політика Cookies</NuxtLink
                             >
                         </li>
                     </ul>
-                </div> -->
+                </div>
 
                 <div class="footer__column">
                     <h3 class="footer__heading">КОНТАКТИ</h3>
@@ -145,32 +139,50 @@
                                 size="18"
                                 class="footer__contact-icon" />
                             <a
-                                :href="`mailto:${contacts.email}`"
-                                v-if="contacts.email"
+                                :href="`mailto:${contactsStore.contacts.email}`"
+                                v-if="contactsStore.contacts.email"
                                 class="footer__link"
-                                >{{contacts.email}}</a
+                                >{{ contactsStore.contacts.email }}</a
                             >
                         </li>
                     </ul>
 
-                    <OthersPrimaryButton
-                        @click="contactsStore.contactPopup = true">
-                        ЗАЛИШИЛИСЬ ПИТАННЯ?
-                    </OthersPrimaryButton>
+                    <OthersPrimaryButton @click="contactsStore.contactPopup = true"> ЗАЛИШИЛИСЬ ПИТАННЯ? </OthersPrimaryButton>
                 </div>
             </div>
 
             <div class="footer__copyright">
+                <div class="footer__payment-methods">
+                    <span class="footer__payment-text">Способи оплати:</span>
+                    <div class="footer__payment-logos">
+                        <div class="footer__payment-logo apple-pay"></div>
+                        <div class="footer__payment-logo google-pay"></div>
+                        <div class="footer__payment-logo visa"></div>
+                        <div class="footer__payment-logo mastercard"></div>
+                    </div>
+                </div>
                 <p>&copy; {{ currentYear }} NaGrani. Всі права захищені.</p>
             </div>
-	</NuxtLayout>
+        </NuxtLayout>
     </footer>
 </template>
 
 <script lang="ts" setup>
 const contactsStore = useContactsStore();
 
-const { contacts } = storeToRefs(contactsStore)
+await useFetch("/api/directus/items/contacts", {
+    server: true,
+    headers: {
+        "Content-Type": "application/json"
+    },
+    onResponse({ response }) {
+        if (response._data) {
+            contactsStore.contacts = response._data.data;
+        } else {
+            throw new Error("Invalid data format");
+        }
+    }
+});
 
 const currentYear = computed(() => new Date().getFullYear());
 </script>
@@ -193,7 +205,7 @@ const currentYear = computed(() => new Date().getFullYear());
         }
 
         @media (min-width: 992px) {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
         }
     }
 
@@ -285,10 +297,73 @@ const currentYear = computed(() => new Date().getFullYear());
         color: #777;
     }
 
-	&__column {
-		.primary-button {
-			margin-top: 24px;
-		}
-	}
+    &__payment-methods {
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid #1a1a1a;
+    }
+
+    &__payment-text {
+        display: block;
+        color: #a0a0a0;
+        font-size: 14px;
+        margin-bottom: 16px;
+        font-weight: 500;
+    }
+
+    &__payment-logos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 24px;
+        flex-wrap: wrap;
+
+        @media (max-width: 767px) {
+            gap: 16px;
+        }
+    }
+
+    &__payment-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        &.apple-pay {
+            width: 64px;
+            height: 64px;
+            background: url("/icons/payment-methods/applepay.svg") no-repeat center;
+            background-size: contain;
+        }
+
+        &.google-pay {
+            width: 64px;
+            height: 64px;
+            background: url("/icons/payment-methods/googlepay.svg") no-repeat center;
+            background-size: contain;
+        }
+
+        &.visa {
+            width: 64px;
+            height: 64px;
+            background: url("/icons/payment-methods/visa.svg") no-repeat center;
+            background-size: contain;
+        }
+
+        &.mastercard {
+            width: 64px;
+            height: 64px;
+            background: url("/icons/payment-methods/mastercard.svg") no-repeat center;
+            background-size: contain;
+        }
+    }
+
+    &__column {
+        .primary-button {
+            margin-top: 24px;
+        }
+    }
 }
 </style>

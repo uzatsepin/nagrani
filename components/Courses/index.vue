@@ -54,7 +54,7 @@
             <div
                 v-else
                 class="courses__grid">
-                <CoursesCard v-for="(course, index) in courses" :course="course" :index="index"/>
+                <CoursesCard v-for="(course, index) in coursesStore.courses" :course="course" :index="index"/>
             </div>
         </NuxtLayout>
     </section>
@@ -64,26 +64,26 @@
 import { useCoursesStore } from "~/stores/courses";
 const coursesStore = useCoursesStore();
 
-const { courses, isLoading, error } = storeToRefs(coursesStore);
-
-// Use computed for status to match the template expectations
-const status = computed(() => isLoading.value ? 'pending' : 'success');
-
-const refresh = async () => {
-    await coursesStore.fetchCourses();
-};
-
-// Ensure courses are loaded
-onMounted(async () => {
-    if (courses.value.length === 0) {
-        await coursesStore.fetchCourses();
+const { data, status, error, refresh } = await useFetch('/api/directus/items/courses', {
+    server: true,
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    onResponse({response}) {
+        if (response._data && Array.isArray(response._data.data)) {
+            coursesStore.courses = response._data.data;
+            
+        } else {
+            throw new Error('Invalid data format');
+        }
     }
-});
+})
+
 
 useSchemaOrg({
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "itemListElement": computed(() => courses.value
+    "itemListElement": computed(() => coursesStore.courses
         .filter(course => course.status === 'published')
         .map((course, index) => ({
             "@type": "ListItem",

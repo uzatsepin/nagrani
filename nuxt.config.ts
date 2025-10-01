@@ -143,6 +143,7 @@ export default defineNuxtConfig({
         // prerender: {
         //     routes: ['/']
         // },
+        preset: "cloudflare-pages"
     },
     routeRules: {
         "/": {

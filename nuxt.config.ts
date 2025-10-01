@@ -3,6 +3,10 @@ export default defineNuxtConfig({
     compatibilityDate: "2024-11-01",
     devtools: { enabled: true },
     css: ["~/assets/style/main.scss"],
+    ssr: true,
+    seo: {
+      automaticDefaults: true
+    },
     runtimeConfig: {
         public: {
             directusUrl: process.env.NUXT_DIRECTUS_API_BASE || "http://localhost:8055"
@@ -140,6 +144,7 @@ export default defineNuxtConfig({
         prerender: {
             routes: ['/']
         },
+        preset: 'cloudflare-pages',
         experimental: {
             wasm: true,
         },

@@ -26,6 +26,7 @@ const { data, status, error } = await useFetch<PublicOfferResponse>('/api/direct
     }
 })
 
+const config = useRuntimeConfig()
 
 useSeoMeta({
     title: 'Політика повернення - NaGrani',
@@ -33,7 +34,7 @@ useSeoMeta({
     ogTitle: 'Політика повернення - NaGrani',
     ogDescription: 'Політика повернення NaGrani.',
     ogImage: '/images/og-image.jpg',
-    ogUrl: 'https://nagrani.life/politika-povernennya',
+    ogUrl: `${config.public.siteUrl || 'https://nagrani.life'}/politika-povernennya`,
     twitterCard: 'summary_large_image',
     robots: 'noindex, nofollow'
 })
@@ -47,12 +48,12 @@ useHead({
                 '@type': 'WebPage',
                 name: 'Політика повернення - NaGrani',
                 description: 'Політика повернення NaGrani.',
-                url: 'https://nagrani.life/politika-povernennya',
+                url: `${config.public.siteUrl || 'https://nagrani.life'}/politika-povernennya`,
                 inLanguage: 'uk-UA',
                 isPartOf: {
                     '@type': 'WebSite',
                     name: 'NaGrani',
-                    url: 'https://nagrani.life'
+                    url: config.public.siteUrl || 'https://nagrani.life'
                 }
             })
         }

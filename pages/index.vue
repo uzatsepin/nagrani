@@ -20,6 +20,8 @@
 <script setup lang="ts">
 const contactsStore = useContactsStore();
 const coursesStore = useCoursesStore();
+const config = useRuntimeConfig();
+const siteUrl = config.public.siteUrl;
 
 // SEO and Structured Data
 useHead({
@@ -30,7 +32,7 @@ useHead({
         { property: 'og:title', content: 'Курси виживання, тактична медицина та самозахист - NaGrani' },
         { property: 'og:description', content: 'Навчальні курси, які допоможуть вижити в будь-яких ситуаціях - від екстремальних природних умов до надзвичайних ситуацій у місті.' },
         { property: 'og:type', content: 'website' },
-        { property: 'og:url', content: 'https://nagrani.life' },
+        { property: 'og:url', content: siteUrl },
         { property: 'og:image', content: '/images/og-image.jpg' },
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: 'Курси виживання, тактична медицина та самозахист - NaGrani' },
@@ -45,8 +47,8 @@ useHead({
                 "@type": "EducationalOrganization",
                 "name": "NaGrani",
                 "alternateName": "Школа виживання NaGrani",
-                "url": "https://nagrani.life",
-                "logo": "https://nagrani.life/images/logo.svg",
+                "url": siteUrl,
+                "logo": `${siteUrl}/images/logo.svg`,
                 "description": "Школа виживання NaGrani - комплексні курси з виживання в екстремальних умовах, тактичної медицини, самозахисту та безпеки.",
                 "address": {
                     "@type": "PostalAddress",

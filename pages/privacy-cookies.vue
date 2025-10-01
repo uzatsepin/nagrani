@@ -26,6 +26,7 @@ const { data, status, error } = await useFetch<PublicOfferResponse>('/api/direct
     }
 })
 
+const config = useRuntimeConfig()
 
 useSeoMeta({
     title: 'Політика Cookies - NaGrani',
@@ -33,7 +34,7 @@ useSeoMeta({
     ogTitle: 'Політика Cookies - NaGrani',
     ogDescription: 'Політика Cookies - NaGrani.',
     ogImage: '/images/og-image.jpg',
-    ogUrl: 'https://nagrani.life/privacy-cookies',
+    ogUrl: `${config.public.siteUrl || 'https://nagrani.life'}/privacy-cookies`,
     twitterCard: 'summary_large_image',
     robots: 'noindex, nofollow'
 })
@@ -48,12 +49,12 @@ useHead({
                 '@type': 'WebPage',
                 name: 'Політика Cookies',
                 description: 'Політика Cookies NaGrani.',
-                url: 'https://nagrani.life/privacy-cookies',
+                url: `${config.public.siteUrl || 'https://nagrani.life'}/privacy-cookies`,
                 inLanguage: 'uk-UA',
                 isPartOf: {
                     '@type': 'WebSite',
                     name: 'NaGrani',
-                    url: 'https://nagrani.life'
+                    url: config.public.siteUrl || 'https://nagrani.life'
                 }
             })
         }

@@ -1,9 +1,10 @@
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig()
   const { method, url } = event.node.req
   const body = method !== 'GET' ? await readBody(event) : undefined
-  
-  const directusUrl = `https://admin.nagrani.life${url?.replace('/api/directus', '') || ''}`
-  
+
+  const directusUrl = `${config.public.directusUrl}${url?.replace('/api/directus', '') || ''}`
+
   try {
     const response = await $fetch(directusUrl, {
       method: method as any,
@@ -12,7 +13,7 @@ export default defineEventHandler(async (event) => {
         'Content-Type': 'application/json'
       }
     })
-    
+
     return response
   } catch (error) {
     throw createError({

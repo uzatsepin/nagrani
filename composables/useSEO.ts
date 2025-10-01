@@ -19,7 +19,9 @@ interface StructuredDataConfig {
     data: Record<string, any>
 }
 
+
 export const useSEO = () => {
+const env = useRuntimeConfig()
     /**
      * Set basic SEO meta tags
      */
@@ -28,7 +30,7 @@ export const useSEO = () => {
             title,
             description,
             image = '/images/og-image.jpg',
-            url = 'https://nagrani.life',
+            url = env.public.siteUrl || 'https://nagrani.life',
             type = 'website',
             author = 'NaGrani',
             publishedTime,
@@ -100,7 +102,7 @@ export const useSEO = () => {
         const { width = 1200, height = 630, quality = 85 } = options
         
         // Используем переменную окружения напрямую для SSR
-        const directusUrl = process.env.NUXT_DIRECTUS_API_BASE || 'https://nagrani.life'
+        const directusUrl = env.public.directusUrl || 'https://nagrani.life'
         let url = `${directusUrl}/assets/${imageId}`
         
         const params = new URLSearchParams()
@@ -126,7 +128,7 @@ export const useSEO = () => {
         const title = `${course.title} - NaGrani`
         const description = course.short_description || course.description?.substring(0, 160) || 'Курс виживання від NaGrani'
         const image = getOptimizedImageUrl(course.image)
-        const url = `https://nagrani.life/course/${course.slug}`
+        const url = `${env.public.siteUrl || 'https://nagrani.life'}/course/${course.slug}`
 
         setSEO({
             title,
@@ -147,7 +149,7 @@ export const useSEO = () => {
                 provider: {
                     "@type": "Organization",
                     "name": "NaGrani",
-                    "url": "https://nagrani.life"
+                    "url": env.public.siteUrl || "https://nagrani.life"
                 },
                 image: image,
                 offers: {

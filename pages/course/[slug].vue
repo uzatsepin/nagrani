@@ -276,6 +276,8 @@ const ogImage = computed(() => {
     return '/images/og-image.jpg'
 })
 
+const config = useRuntimeConfig()
+
 useHead(() => {
     if (course.value) {
         return {
@@ -288,7 +290,7 @@ useHead(() => {
                 { property: 'og:image:width', content: '1200' },
                 { property: 'og:image:height', content: '630' },
                 { property: 'og:type', content: 'article' },
-                { property: 'og:url', content: `https://nagrani.life/course/${course.value.slug}` },
+                { property: 'og:url', content: `${config.public.siteUrl || 'https://nagrani.life'}/course/${course.value.slug}` },
                 { name: 'twitter:card', content: 'summary_large_image' },
                 { name: 'twitter:title', content: `${course.value.title} - NaGrani` },
                 { name: 'twitter:description', content: course.value.short_description },

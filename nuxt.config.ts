@@ -9,7 +9,8 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            directusUrl: process.env.NUXT_DIRECTUS_API_BASE || "http://localhost:8055"
+            directusUrl: process.env.NUXT_DIRECTUS_API_BASE || "http://localhost:8055",
+            siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000"
         }
     },
     vite: {
@@ -33,7 +34,7 @@ export default defineNuxtConfig({
         name: "NaGrani",
         description:
             "NaGrani – школа виживання й безпеки. Комплексні курси виживання в екстремальних умовах, тактичної медицини та самозахисту від досвідчених інструкторів.",
-        url: "https://nagrani.life",
+        url: process.env.NUXT_PUBLIC_SITE_URL || "https://nagrani.life",
         defaultLocale: "uk"
     },
     app: {
@@ -59,7 +60,7 @@ export default defineNuxtConfig({
                     property: "og:description",
                     content: "Навчальні курси, які допоможуть вижити в будь-яких ситуаціях - від екстремальних природних умов до надзвичайних ситуацій у місті."
                 },
-                { property: "og:url", content: "https://nagrani.life" },
+                { property: "og:url", content: process.env.NUXT_PUBLIC_SITE_URL || "https://nagrani.life" },
                 { property: "og:image", content: "/images/og-image.jpg" }
             ],
             link: [
@@ -68,7 +69,7 @@ export default defineNuxtConfig({
                 { rel: "shortcut icon", href: "/favicon/favicon.ico" },
                 { rel: "apple-touch-icon", sizes: "180x180", href: "/favicon/apple-touch-icon.png" },
                 { rel: "manifest", href: "/favicon/site.webmanifest" },
-                { rel: "canonical", href: "https://nagrani.life" },
+                { rel: "canonical", href: process.env.NUXT_PUBLIC_SITE_URL || "https://nagrani.life" },
                 { rel: "preconnect", href: "https://fonts.googleapis.com" },
                 { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" },
                 // Preload critical images
@@ -90,47 +91,47 @@ export default defineNuxtConfig({
     modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "nuxt-aos", "@pinia/nuxt", "@nuxtjs/seo", "@vueuse/nuxt"],
 
     // // Image optimization
-    // image: {
-    //     quality: 80,
-    //     format: ["webp", "png", "jpg"],
-    //     densities: [1, 2],
-    //     screens: {
-    //         xs: 320,
-    //         sm: 640,
-    //         md: 768,
-    //         lg: 1024,
-    //         xl: 1280,
-    //         xxl: 1536
-    //     },
-    //     presets: {
-    //         avatar: {
-    //             modifiers: {
-    //                 format: "webp",
-    //                 width: 80,
-    //                 height: 80,
-    //                 quality: 80
-    //             }
-    //         },
-    //         course: {
-    //             modifiers: {
-    //                 format: "webp",
-    //                 quality: 85,
-    //                 fit: "cover"
-    //             }
-    //         }
-    //     },
-    //     providers: {
-    //         directus: {
-    //             provider: "ipx",
-    //             options: {
-    //                 baseURL: process.env.NUXT_DIRECTUS_API_BASE || "http://localhost:8055",
-    //                 modifiers: {
-    //                     srcset: false
-    //                 }
-    //             }
-    //         }
-    //     }
-    // },
+    image: {
+        quality: 80,
+        format: ["webp", "png", "jpg"],
+        densities: [1, 2],
+        screens: {
+            xs: 320,
+            sm: 640,
+            md: 768,
+            lg: 1024,
+            xl: 1280,
+            xxl: 1536
+        },
+        presets: {
+            avatar: {
+                modifiers: {
+                    format: "webp",
+                    width: 80,
+                    height: 80,
+                    quality: 80
+                }
+            },
+            course: {
+                modifiers: {
+                    format: "webp",
+                    quality: 85,
+                    fit: "cover"
+                }
+            }
+        },
+        providers: {
+            directus: {
+                provider: "ipx",
+                options: {
+                    baseURL: process.env.NUXT_DIRECTUS_API_BASE || "http://localhost:8055",
+                    modifiers: {
+                        srcset: false
+                    }
+                }
+            }
+        }
+    },
 
     experimental: {
         payloadExtraction: false,

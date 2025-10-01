@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import type { PublicOfferResponse } from '~/types/offer.types'
-
+const config = useRuntimeConfig()
 const { data, status, error } = await useFetch<PublicOfferResponse>('/api/directus/items/privacy_policy', {
     server: true,
     headers: {
@@ -33,7 +33,7 @@ useSeoMeta({
     ogTitle: 'Політика конфіденційності - NaGrani',
     ogDescription: 'Політика конфіденційності NaGrani.',
     ogImage: '/images/og-image.jpg',
-    ogUrl: 'https://nagrani.life/politika-konfidentsiynosti',
+    ogUrl: `${config.public.siteUrl || 'https://nagrani.life'}/politika-konfidentsiynosti`,
     twitterCard: 'summary_large_image',
     robots: 'noindex, nofollow'
 })
@@ -48,12 +48,12 @@ useHead({
                 '@type': 'WebPage',
                 name: 'Політика конфіденційності',
                 description: 'Політика конфіденційності NaGrani.',
-                url: 'https://nagrani.life/politika-konfidentsiynosti',
+                url: `${config.public.siteUrl || 'https://nagrani.life'}/politika-konfidentsiynosti`,
                 inLanguage: 'uk-UA',
                 isPartOf: {
                     '@type': 'WebSite',
                     name: 'NaGrani',
-                    url: 'https://nagrani.life'
+                    url: config.public.siteUrl || 'https://nagrani.life'
                 }
             })
         }

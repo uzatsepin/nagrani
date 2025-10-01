@@ -1,5 +1,6 @@
 export default defineEventHandler(async (event) => {
-  const baseUrl = 'https://nagrani.life'
+  const config = useRuntimeConfig()
+  const baseUrl = config.public.siteUrl || 'https://nagrani.life'
   const currentDate = new Date().toISOString()
   
   // Static pages

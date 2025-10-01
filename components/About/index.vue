@@ -173,6 +173,8 @@ const instructors = [
 </script>
 
 <style scoped lang="scss">
+@use "sass:color";
+
 .about {
     padding: 64px 0;
     background-color: #0a0a0a;
@@ -438,7 +440,7 @@ const instructors = [
         &--active {
             .about__timeline-dot {
                 transform: scale(1.3);
-                background-color: lighten($accent, 10%);
+                background-color: color.adjust($accent, $lightness: 10%);
                 box-shadow: 0 0 15px rgba($accent, 0.7);
             }
 

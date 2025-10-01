@@ -62,6 +62,8 @@ useHead({
 </script>
 
 <style scoped lang="scss">
+@use "sass:color";
+
 .policy-page {
     min-height: 80vh;
     padding: 100px 0 60px;
@@ -208,7 +210,7 @@ useHead({
                     
                     &::before {
                         content: "•";
-                        color: darken($accent, 10%);
+                        color: color.adjust($accent, $lightness: -10%);
                     }
                 }
             }
@@ -237,7 +239,7 @@ useHead({
         font-weight: 500;
 
         &:hover {
-            color: lighten($accent, 15%);
+            color: color.adjust($accent, $lightness: 15%);
             text-decoration: none;
             background-color: rgba($accent, 0.1);
             padding: 2px 4px;
@@ -269,7 +271,7 @@ useHead({
     // Блоки с контактной информацией и реквизитами
     :deep(p:has(strong:contains("Контактна інформація"))),
     :deep(p:has(strong:contains("АДРЕСА ТА РЕКВІЗИТИ"))) {
-        background: linear-gradient(135deg, $thirdBlack 0%, darken($thirdBlack, 5%) 100%);
+        background: linear-gradient(135deg, $thirdBlack 0%, color.adjust($thirdBlack, $lightness: -5%) 100%);
         padding: 2rem;
         border-radius: 12px;
         border: 1px solid #444;

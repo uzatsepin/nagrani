@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             directusUrl: process.env.NUXT_DIRECTUS_API_BASE || "http://localhost:8055",
-            siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "http://localhost:3000"
+            siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "https://nagrani.life"
         }
     },
     vite: {

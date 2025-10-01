@@ -89,48 +89,48 @@ export default defineNuxtConfig({
 
     modules: ["@nuxt/eslint", "@nuxt/fonts", "@nuxt/icon", "@nuxt/image", "nuxt-aos", "@pinia/nuxt", "@nuxtjs/seo", "@vueuse/nuxt"],
 
-    // Image optimization
-    image: {
-        quality: 80,
-        format: ["webp", "png", "jpg"],
-        densities: [1, 2],
-        screens: {
-            xs: 320,
-            sm: 640,
-            md: 768,
-            lg: 1024,
-            xl: 1280,
-            xxl: 1536
-        },
-        presets: {
-            avatar: {
-                modifiers: {
-                    format: "webp",
-                    width: 80,
-                    height: 80,
-                    quality: 80
-                }
-            },
-            course: {
-                modifiers: {
-                    format: "webp",
-                    quality: 85,
-                    fit: "cover"
-                }
-            }
-        },
-        providers: {
-            directus: {
-                provider: "ipx",
-                options: {
-                    baseURL: process.env.NUXT_DIRECTUS_API_BASE || "http://localhost:8055",
-                    modifiers: {
-                        srcset: false
-                    }
-                }
-            }
-        }
-    },
+    // // Image optimization
+    // image: {
+    //     quality: 80,
+    //     format: ["webp", "png", "jpg"],
+    //     densities: [1, 2],
+    //     screens: {
+    //         xs: 320,
+    //         sm: 640,
+    //         md: 768,
+    //         lg: 1024,
+    //         xl: 1280,
+    //         xxl: 1536
+    //     },
+    //     presets: {
+    //         avatar: {
+    //             modifiers: {
+    //                 format: "webp",
+    //                 width: 80,
+    //                 height: 80,
+    //                 quality: 80
+    //             }
+    //         },
+    //         course: {
+    //             modifiers: {
+    //                 format: "webp",
+    //                 quality: 85,
+    //                 fit: "cover"
+    //             }
+    //         }
+    //     },
+    //     providers: {
+    //         directus: {
+    //             provider: "ipx",
+    //             options: {
+    //                 baseURL: process.env.NUXT_DIRECTUS_API_BASE || "http://localhost:8055",
+    //                 modifiers: {
+    //                     srcset: false
+    //                 }
+    //             }
+    //         }
+    //     }
+    // },
 
     experimental: {
         payloadExtraction: false,
@@ -147,7 +147,9 @@ export default defineNuxtConfig({
     },
     routeRules: {
         "/": {
-            headers: { "cache-control": "s-maxage=31536000" }
+            headers: {
+                'cache-control': 'public, max-age=3600, s-maxage=3600'
+            }
         },
         "/images/**": {
             headers: {

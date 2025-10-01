@@ -150,7 +150,6 @@ export default defineNuxtConfig({
         },
         routeRules: {
             "/": {
-                prerender: true,
                 headers: { "cache-control": "s-maxage=31536000" }
             },
             '/images/**': {

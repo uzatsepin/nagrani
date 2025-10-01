@@ -141,9 +141,9 @@ export default defineNuxtConfig({
     nitro: {
         minify: true,
         compressPublicAssets: true,
-        prerender: {
-            routes: ['/']
-        },
+        // prerender: {
+        //     routes: ['/']
+        // },
         preset: 'cloudflare-pages',
         experimental: {
             wasm: true,

@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     css: ["~/assets/style/main.scss"],
     ssr: true,
     seo: {
-      automaticDefaults: true
+        automaticDefaults: true
     },
     runtimeConfig: {
         public: {
@@ -92,7 +92,7 @@ export default defineNuxtConfig({
     // Image optimization
     image: {
         quality: 80,
-        format: ['webp', 'png', 'jpg'],
+        format: ["webp", "png", "jpg"],
         densities: [1, 2],
         screens: {
             xs: 320,
@@ -100,12 +100,12 @@ export default defineNuxtConfig({
             md: 768,
             lg: 1024,
             xl: 1280,
-            xxl: 1536,
+            xxl: 1536
         },
         presets: {
             avatar: {
                 modifiers: {
-                    format: 'webp',
+                    format: "webp",
                     width: 80,
                     height: 80,
                     quality: 80
@@ -113,17 +113,17 @@ export default defineNuxtConfig({
             },
             course: {
                 modifiers: {
-                    format: 'webp',
+                    format: "webp",
                     quality: 85,
-                    fit: 'cover'
+                    fit: "cover"
                 }
             }
         },
         providers: {
             directus: {
-                provider: 'ipx',
+                provider: "ipx",
                 options: {
-                    baseURL: process.env.NUXT_DIRECTUS_API_BASE || 'http://localhost:8055',
+                    baseURL: process.env.NUXT_DIRECTUS_API_BASE || "http://localhost:8055",
                     modifiers: {
                         srcset: false
                     }
@@ -132,7 +132,6 @@ export default defineNuxtConfig({
         }
     },
 
-    // Performance optimizations
     experimental: {
         payloadExtraction: false,
         renderJsonPayloads: true
@@ -144,33 +143,30 @@ export default defineNuxtConfig({
         // prerender: {
         //     routes: ['/']
         // },
-        preset: 'cloudflare-pages',
-        experimental: {
-            wasm: true,
+        preset: "cloudflare-pages"
+    },
+    routeRules: {
+        "/": {
+            headers: { "cache-control": "s-maxage=31536000" }
         },
-        routeRules: {
-            "/": {
-                headers: { "cache-control": "s-maxage=31536000" }
-            },
-            '/images/**': {
-                headers: {
-                    'Cache-Control': 'public, max-age=31536000, immutable',
-                },
-            },
-            '/icons/**': {
-                headers: {
-                    'Cache-Control': 'public, max-age=31536000, immutable',
-                }
-            },
-            '/_nuxt/**': {
-                headers: {
-                    'Cache-Control': 'public, max-age=31536000, immutable',
-                }
-            },
-            "/_ipx/**": {
-                headers: {
-                    'Cache-Control': 'public, max-age=31536000, immutable',
-                }
+        "/images/**": {
+            headers: {
+                "Cache-Control": "public, max-age=31536000, immutable"
+            }
+        },
+        "/icons/**": {
+            headers: {
+                "Cache-Control": "public, max-age=31536000, immutable"
+            }
+        },
+        "/_nuxt/**": {
+            headers: {
+                "Cache-Control": "public, max-age=31536000, immutable"
+            }
+        },
+        "/_ipx/**": {
+            headers: {
+                "Cache-Control": "public, max-age=31536000, immutable"
             }
         }
     }

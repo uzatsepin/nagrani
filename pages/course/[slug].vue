@@ -569,6 +569,7 @@ const openPresentation = () => {
         display: grid;
         grid-template-columns: 1fr;
         gap: 60px;
+        position: relative;
         
         @media (min-width: 992px) {
             grid-template-columns: 2fr 1fr;
@@ -627,6 +628,16 @@ const openPresentation = () => {
 }
 
 // Sidebar
+.course-description__sidebar {
+    @media (min-width: 992px) {
+        position: sticky;
+        top: 100px; // Отступ от верха при прилипании
+        align-self: flex-start; // Важно для работы sticky
+        max-height: calc(100vh - 120px); // Максимальная высота
+        overflow-y: auto; // Скролл если контент не помещается
+    }
+}
+
 .info-card {
     background-color: $thirdBlack;
     border-radius: 12px;
